@@ -130,6 +130,27 @@ export default new Router({
                     component: () => import("@/components/employee/TallyClerk"),
                     name: "理货员"
                 },
+                
+                {
+                    path: '/updateUse',
+                    component: () => import("@/components/employee/updateUse"),
+                    name: "修改收银员"
+                },
+                {
+                    path: '/addUser',
+                    component: () => import("@/components/employee/addUser"),
+                    name: "添加收银员"
+                },
+                {
+                    path: '/addTally',
+                    component: () => import("@/components/employee/addTally"),
+                    name: "修改"
+                },
+                {
+                    path: '/addSurveyor',
+                    component: () => import("@/components/employee/addSurveyor"),
+                    name: "添加验货员"
+                },
             ]
         },
     ],

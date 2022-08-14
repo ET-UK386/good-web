@@ -10,7 +10,7 @@
         <el-container>
           <Nav />
           <el-main>
-            <div>111111</div>
+            <FirstPage></FirstPage>
           </el-main>
           <el-footer class="footer">
             <Footer />
@@ -25,12 +25,15 @@ import Header from "./common/Header.vue";
 import Footer from "./common/Footer.vue";
 import Menu from "./common/Menu.vue";
 import Nav from './common/Nav.vue';
+import FirstPage from './homepage/FirstPage.vue'
+
 export default {
   components: {
     Header,
     Footer,
     Nav,
     Menu,
+    FirstPage
   },
 };
 </script>
