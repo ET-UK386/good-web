@@ -40,7 +40,15 @@
 
   </el-table>
 
-
+ <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[4, 8, 12, 16]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
 
 
     </div>
@@ -55,12 +63,25 @@ export default {
             allUser:[],
             userlist:[],
 
+             currentPage:1,
+       pageSize:4,
+       total:0,
+
             username:"",
             address:"",
             phone:""
 
         }
     },methods:{
+         handleSizeChange(val) {
+      this.currentPage = 1;
+      this.list(this.currentPage, val);
+      console.log(`每页 ${val} 条`); //可以选择一个页面多少条
+    },
+    handleCurrentChange(val) {
+      this.list(val, this.pageSize); //下一页 上一页的
+      console.log(`当前页: ${val}`);
+    },
         updatenovle(row){
             let id=row.id;
            
@@ -84,8 +105,9 @@ export default {
             type: 'success',
             message: '删除成功!'
           
-          })
-                   this.list(); 
+          })           
+                      this.currentPage=1;
+                   this.list(this.currentPage,this.pageSize); 
                 }
             })
         })
@@ -96,7 +118,7 @@ export default {
 
         },
         querynove(){
-            this.list()
+            this.list(this.currentPage,this.pageSize)
         },
         addnove(){
             this.$router.push("/addSurveyor")
@@ -104,11 +126,12 @@ export default {
      
         }
             ,
-        list(){
+        list(currentPage,pageSize){
               this.axios.get("http://localhost:8088/user/Listsurveyor",{
                 
                 params:{
-                   
+                    currentPage:currentPage,
+        pageSize:pageSize,
                     username:this.username,
                 address:this.address,
                 phone:this.phone
@@ -116,26 +139,26 @@ export default {
 
               }).then((response)=>{
                 if(response.status===200){
-                    this.allUser=response.data
+                    this.allUser=response.data.listsurveyor
+                    this.total=response.data.countListsurveyor
                     console.log(response)
                 }
 
         })
         },
-        user(){
-            this.axios.get("http://localhost:8088/user/Listtally").then((response)=>{
-                if(response.status===200){
-                    this.userlist=response.data
-                    console.log(response)
-                }
-
-        })
+          user() {
+      this.axios.get("http://localhost:8088/user/userList").then((response) => {
+        if (response.status === 200) {
+          this.userlist = response.data;
+          console.log(response);
         }
+      });
+    },
        
     },
     created(){
 
-        this.list();
+        this.list(this.currentPage,this.pageSize);
         this.user();
       
     }
