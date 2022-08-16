@@ -48,7 +48,7 @@ export default {
              
 
                 this.$message.success("登录成功");
-                this.$router.push("/home");
+                this.$router.push("/HomePage");
            }else{
             this.$message.error(response.data.msg);
            }  
