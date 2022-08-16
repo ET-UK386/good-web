@@ -43,8 +43,10 @@ export default {
           //提交
           this.axios.post("http://localhost:8088/user/login",this.user).then((response)=>{
            if(response.status == 200   && response.data.flag == "success"){
+              console.log(response)
               sessionStorage.setItem("token",response.data.token);
-              sessionStorage.setItem("user",response.data.name);
+              sessionStorage.setItem("username",response.data.username);
+            
              
 
                 this.$message.success("登录成功");
