@@ -11,7 +11,7 @@
       </el-table-column>
       <el-table-column prop="goodsku.skuName" label="入库商品名称" width="180">
       </el-table-column>
-      <el-table-column prop="detail" label="入库状态" width="180">
+      <el-table-column prop="statusStr" label="入库状态" width="180">
       </el-table-column>
       <el-table-column prop="warehousingNumber" label="数量" width="180">
       </el-table-column>
@@ -113,6 +113,7 @@ export default {
         examineTime: '2022-08-13T01:20:54.000+00:00',
         warehousingTime: '2022-08-13 01:20:58',
         status: 1,
+        statusStr: 1,
         detailedPurchase: {
           batch: '00001',
           purchasePrice: 2.5,
@@ -141,7 +142,7 @@ export default {
         .then((res) => {
           let data = res.data;
           if (data.code) {
-            this.gridData = data.data;
+            data.data.this.gridData = data.data;
           }
         })
         .catch((error) => {
