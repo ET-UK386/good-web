@@ -62,8 +62,8 @@ export default {
 .title {
   font-weight: 700;
   font-size: 25px;
-  position: relative;
-  right: 550px;
+  position: absolute;
+  left: 5%;
   color: #fff;
 }
 .image{

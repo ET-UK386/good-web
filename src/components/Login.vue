@@ -24,8 +24,8 @@ export default {
   data() {
     return {
       user: {
-       username:"",
-       password:""
+       username:"张三",
+       password:"123"
       },
       rules: {
         username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
