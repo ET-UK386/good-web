@@ -40,7 +40,7 @@ export default {
 <style>
 .content {
   width: 98%;
-  height: 650px;
+  height: 90%;
   position: absolute;
   top: 80px;
 }
