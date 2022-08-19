@@ -3,10 +3,11 @@
     <el-header>
     <div class="image">
     <img :src="backImg" width="40px" height="40px" />
+    <span class="title">商品管理系统</span>
     </div>
-      <div class="title">商品管理系统</div>
+      <!-- <div class="title">商品管理系统</div> -->
       <div class="thead">
-       
+
           <el-dropdown>
           <el-button>
            
@@ -63,7 +64,8 @@ export default {
   font-weight: 700;
   font-size: 25px;
   position: relative;
-  right: 550px;
+  top: -10px;
+  left: 15px;
   color: #fff;
 }
 .image{

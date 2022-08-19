@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="20">
+  <el-col :span="20" style="width:98%" >
  
     
 
