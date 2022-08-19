@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="warehousingTime" label="入库审核时间" width="180">
+      <el-table-column prop="createTime" label="入库审核时间" width="180">
       </el-table-column>
       <el-table-column
         prop="detailedPurchase.batch"
@@ -11,8 +11,13 @@
       </el-table-column>
       <el-table-column prop="goodsku.skuName" label="入库商品名称" width="180">
       </el-table-column>
-      <el-table-column prop="statusStr" label="入库状态" width="180">
+
+      <el-table-column label="状态" width="180">
+        <template slot-scope="scope">
+          <el-tag size="medium">{{ scope.row.statusStr }}</el-tag>
+        </template>
       </el-table-column>
+
       <el-table-column prop="warehousingNumber" label="数量" width="180">
       </el-table-column>
       <el-table-column
@@ -33,7 +38,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+    <el-dialog title="仓库记录" :visible.sync="dialogTableVisible">
       <table id="table" cellspacing="0">
         <tr>
           <td class="right">入库批号</td>
@@ -55,12 +60,20 @@
             <input
               readonly
               type="text"
-              :value="gridData.examineUser.username"
+              :value="
+                gridData.examineUser == null
+                  ? ''
+                  : gridData.examineUser.username
+              "
             />
           </td>
           <td class="right">审核时间</td>
           <td colspan="3">
-            <input readonly type="text" :value="gridData.examineTime" />
+            <input
+              readonly
+              type="text"
+              :value="gridData.examineTime == null ? '' : gridData.examineTime"
+            />
           </td>
         </tr>
         <tr>
@@ -69,12 +82,22 @@
             <input
               readonly
               type="text"
-              :value="gridData.warehousingUser.username"
+              :value="
+                gridData.warehousingUser == null
+                  ? ''
+                  : gridData.warehousingUser.username
+              "
             />
           </td>
           <td class="right">入库时间</td>
           <td colspan="3">
-            <input readonly type="text" :value="gridData.warehousingTime" />
+            <input
+              readonly
+              type="text"
+              :value="
+                gridData.warehousingTime == null ? '' : gridData.warehousingTime
+              "
+            />
           </td>
         </tr>
         <tr>
@@ -110,24 +133,24 @@ export default {
       dialogTableVisible: false,
       gridData: {
         id: 1,
-        examineTime: '2022-08-13T01:20:54.000+00:00',
-        warehousingTime: '2022-08-13 01:20:58',
-        status: 1,
-        statusStr: 1,
+        examineTime: '',
+        warehousingTime: '',
+        status: 0,
+        statusStr: 0,
         detailedPurchase: {
-          batch: '00001',
-          purchasePrice: 2.5,
-          number: 30
+          batch: '',
+          purchasePrice: 0,
+          number: 0
         },
         examineUser: {
-          username: '李四'
+          username: ''
         },
         warehousingUser: {
-          username: '王五'
+          username: ''
         },
         goodsku: {
-          skuName: '百世可乐',
-          skuDesc: '百世可乐'
+          skuName: '',
+          skuDesc: ''
         }
       }
     };
@@ -142,7 +165,7 @@ export default {
         .then((res) => {
           let data = res.data;
           if (data.code) {
-            data.data.this.gridData = data.data;
+            this.gridData = data.data;
           }
         })
         .catch((error) => {
