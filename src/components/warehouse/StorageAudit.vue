@@ -118,6 +118,8 @@ export default {
       let readonly = document.getElementsByClassName('b');
       readonly[0].removeAttribute('readonly');
       readonly[1].removeAttribute('readonly');
+      readonly[0].style.border = '1px solid black';
+      readonly[1].style.border = '1px solid black';
       this.gridData.status = 5;
     },
     // 通过
