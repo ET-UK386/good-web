@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column prop="renewTime" label="修改时间" width="100">
       </el-table-column>
-      <el-table-column label="操作" width="180">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             icon="el-icon-search"
@@ -65,6 +65,12 @@
             type="danger"
             icon="el-icon-delete"
             @click="del(scope.row)"
+            circle
+          ></el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-picture"
+            @click="upload(scope.row)"
             circle
           ></el-button>
         </template>
@@ -167,6 +173,16 @@
           ></el-input>
         </el-form-item>
       </el-form>
+
+      <!--图片展示-->
+      <div class="demo-image__preview">
+        <el-image
+          style="width: 300px; height: 300px"
+          :src="imgUrls[0]"
+          :preview-src-list="imgUrls"
+        >
+        </el-image>
+      </div>
     </el-dialog>
 
     <!-- 新增 -->
@@ -420,6 +436,18 @@
         <el-button type="primary" @click="update">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 上传图片标签-->
+    <el-dialog :title="goodName" :visible.sync="dialogVisible3" width="30%">
+      <div>
+        <span class="add">上传图片</span>
+        <input type="file" @change="getFile($event)" />
+      </div>
+      <div>
+        <input type="hidden" :value="goodId" />
+      </div>
+      <button @click="uploadImg">上传</button>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -447,6 +475,7 @@ export default {
       dialogFormVisible1: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
+      dialogVisible3: false,
       goodskuAll: [],
       skuName: '',
       sortName: '',
@@ -464,6 +493,11 @@ export default {
         manufacturer: '',
         vendor: { vendorName: '', tel: '' }
       },
+      // 上传图片属性
+      file: {},
+      goodId: '',
+      goodName: '',
+      imgUrls: [],
 
       rules: {
         skuName: [{ required: true, message: '请输入商品名', trigger: 'blur' }],
@@ -561,6 +595,12 @@ export default {
       this.goodspu = this.goodskus.goodspu;
       this.warehouse = this.goodskus.warehouse;
       this.vendor = this.goodskus.vendor;
+      this.axios
+        .get('http://localhost:8088/uploadImg/findBySkuId/' + row.id)
+        .then((res) => {
+          console.log(res.data);
+          this.imgUrls = res.data;
+        });
     },
     //根据商品名或分类名查询
     search() {
@@ -639,6 +679,46 @@ export default {
             }
           });
       });
+    },
+    // 上传图片方法
+    upload(row) {
+      this.dialogVisible3 = true;
+      console.log(row);
+      this.goodId = row.id;
+      this.goodName = row.skuName;
+    },
+    // 监听所有文件，获取上传文件
+    getFile(event) {
+      console.log(event.target.files[0]);
+      this.file = event.target.files[0];
+    },
+    // 图片上传表单提交事件
+    uploadImg() {
+      var formData = new FormData();
+      formData.append('file', this.file);
+      formData.append('skuId', this.goodId);
+      formData.append('name', this.goodName);
+      this.axios({
+        url: 'http://localhost:8088/uploadImg/add',
+        method: 'post',
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then((res) => {
+          let data = res.data;
+          if (data.code === 200) {
+            this.$message.success('上传成功');
+            this.dialogVisible3 = false;
+          } else {
+            this.$message.error('上传失败');
+          }
+        })
+        .error((err) => {
+          this.$message.error('网络正忙');
+          console.log(err);
+        });
     }
   },
   created() {
