@@ -148,6 +148,7 @@ export default {
             if (res.status === 200) {
               alert("审核成功");
               this.dialogFormVisible2 = false;
+              this.editData = { status: "", opinion: "", status2: "" };
             }
           })
           .catch((error) => {
@@ -185,9 +186,9 @@ export default {
                 item.status = "审核完成";
               } else if (item.status == 2) {
                 item.status = "审核不通过";
-              }else if (item.status == 3) {
+              } else if (item.status == 3) {
                 item.status = "供应商没货";
-              }else if (item.status == 4) {
+              } else if (item.status == 4) {
                 item.status = "订单完成";
               }
             });
