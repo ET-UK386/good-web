@@ -48,7 +48,6 @@ export default {
               sessionStorage.setItem("username",response.data.username);
             
              
-
                 this.$message.success("登录成功");
                 this.$router.push("/HomePage");
            }else{
@@ -57,7 +56,6 @@ export default {
           }).catch((error)=>{
             console.log(error);
           })
-          
         }
       });
     },
