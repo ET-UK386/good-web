@@ -23,7 +23,7 @@
 import Header from "./common/Header.vue";
 import Footer from "./common/Footer.vue";
 import Menu from "./common/Menu.vue";
-import Nav from './common/Nav.vue';
+import Nav from "./common/Nav.vue";
 export default {
   components: {
     Header,
@@ -36,7 +36,7 @@ export default {
 <style>
 .content {
   width: 98%;
-  height: 650px;
+  height: 90%;
   position: absolute;
   top: 80px;
 }
@@ -45,5 +45,7 @@ export default {
   position: relative;
   margin-bottom: -200px;
   bottom: 0px;
+  position: relative;
+  left: 1%;
 }
 </style>
