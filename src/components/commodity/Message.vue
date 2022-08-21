@@ -270,9 +270,9 @@
         </el-form-item>
         <el-form-item label="上架状态" :label-width="formLabelWidth" prop="goodspu.status">
           <el-select v-model="goodsku.goodspu.statusStr" placeholder="请选择状态">
-            <el-option label="上架" value="0">上架</el-option>
-            <el-option label="下架" value="1">下架</el-option>
-            <el-option label="售罄" value="2">售罄</el-option>
+            <el-option label="上架" value="上架">上架</el-option>
+            <el-option label="下架" value="下架">下架</el-option>
+            <el-option label="售罄" value="售罄">售罄</el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="库存" :label-width="formLabelWidth" >
