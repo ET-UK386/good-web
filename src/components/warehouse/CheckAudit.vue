@@ -108,10 +108,8 @@ export default {
   methods: {
     handleEdit(index, row) {
       this.dialogTableVisible = true;
-
-      this.gridData = row;
-
-      console.log(index, row);
+      this.$data.contract = JSON.parse(JSON.stringify(row));
+      this.gridData = this.$data.contract;
     },
     // 操作
     endit() {
@@ -143,6 +141,8 @@ export default {
             this.dialogTableVisible = false;
             this.$message.success(data.message);
             this.bindData();
+          } else {
+            this.$message.error(data.message);
           }
         });
     },

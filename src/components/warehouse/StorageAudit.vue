@@ -109,7 +109,8 @@ export default {
     handleEdit(index, row) {
       this.dialogTableVisible = true;
 
-      this.gridData = row;
+      this.$data.contract = JSON.parse(JSON.stringify(row));
+      this.gridData = this.$data.contract;
 
       console.log(index, row);
     },
@@ -136,6 +137,8 @@ export default {
             this.dialogTableVisible = false;
             this.$message.success(data.message);
             this.bindData();
+          } else {
+            this.$message.error(data.message);
           }
         });
     },
