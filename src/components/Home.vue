@@ -42,7 +42,8 @@ export default {
 }
 .footer {
   width: 98%;
-  margin-bottom: 0px;
+  position: relative;
+  margin-bottom: -200px;
   bottom: 0px;
   position: relative;
   left: 1%;
