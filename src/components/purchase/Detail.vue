@@ -183,7 +183,7 @@ export default {
               if (item.status == 0) {
                 item.status = "审核中";
               } else if (item.status == 1) {
-                item.status = "审核完成";
+                item.status = "审核通过";
               } else if (item.status == 2) {
                 item.status = "审核不通过";
               } else if (item.status == 3) {
@@ -216,13 +216,9 @@ export default {
               if (item.status == 0) {
                 item.status = "审核中";
               } else if (item.status == 1) {
-                item.status = "审核完成";
-              } else if (item.status == 2) {
                 item.status = "审核不通过";
-              } else if (item.status == 3) {
-                item.status = "审核驳回需要修改";
-              } else if (item.status == 4) {
-                item.status = "订单完成";
+              } else if (item.status == 2) {
+                item.status = "审核通过";
               }
             });
           }
