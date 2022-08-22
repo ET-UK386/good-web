@@ -109,7 +109,8 @@ export default {
     handleEdit(index, row) {
       this.dialogTableVisible = true;
 
-      this.gridData = row;
+      this.$data.contract = JSON.parse(JSON.stringify(row));
+      this.gridData = this.$data.contract;
 
       console.log(index, row);
     },
@@ -118,6 +119,8 @@ export default {
       let readonly = document.getElementsByClassName('b');
       readonly[0].removeAttribute('readonly');
       readonly[1].removeAttribute('readonly');
+      readonly[0].style.border = '1px solid black';
+      readonly[1].style.border = '1px solid black';
       this.gridData.status = 5;
     },
     // 通过
@@ -134,6 +137,8 @@ export default {
             this.dialogTableVisible = false;
             this.$message.success(data.message);
             this.bindData();
+          } else {
+            this.$message.error(data.message);
           }
         });
     },
