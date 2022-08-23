@@ -68,8 +68,8 @@
             placeholder="请选择审核结果"
             style="width: 800px"
           >
-            <el-option label="通过" value="2"></el-option>
-            <el-option label="不通过" value="1"></el-option>
+            <el-option label="通过" value="1"></el-option>
+            <el-option label="不通过" value="0"></el-option>
           </el-select>
         </el-form-item>
 
@@ -106,49 +106,60 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import axios from 'axios';
 export default {
   data() {
     return {
-      id: "",
-      roleId: "",
-      token: "",
+      id: '',
+      roleId: '',
+      token: '',
       dialogTableVisible1: false,
       dialogFormVisible2: false,
       tableData: [],
       gridData: [],
       editData: {
-        status: "",
-        opinion: "",
-        status2: "",
-      },
+        status: '',
+        opinion: '',
+        status2: ''
+      }
     };
   },
 
   methods: {
     add() {
-      if (this.editData.status === "") {
-        alert("请选择状态");
+      if (this.editData.status === '') {
+        alert('请选择状态');
         return;
-      } else if (this.editData.opinion === "") {
-        alert("请输入审核意见");
+      } else if (this.editData.opinion === '') {
+        alert('请输入审核意见');
         return;
       } else {
         axios
-          .get("http://localhost:8088/updatePurchaseById/", {
+          .get('http://localhost:8088/updatePurchaseById/', {
             params: {
               token: this.token,
               status: this.editData.status,
               opinion: this.editData.opinion,
               id: this.id,
-              status2: this.editData.status2,
-            },
+              status2: this.editData.status2
+            }
           })
           .then((res) => {
             if (res.status === 200) {
-              alert("审核成功");
+              let status1 = this.editData.status;
+              alert(this.editData.status + '审核成功' + status1);
               this.dialogFormVisible2 = false;
-              this.editData = { status: "", opinion: "", status2: "" };
+              this.editData = { status: '', opinion: '', status2: '' };
+
+              // 当详细订单完成是 创建入库流程订单
+              this.axios
+                .post('http://localhost:8088/warehousing/createWarehousing', {
+                  id: this.id,
+                  status: status1
+                })
+                .then((res) => {
+                  console.log(res.data);
+                });
             }
           })
           .catch((error) => {
@@ -161,7 +172,7 @@ export default {
     edit(row) {
       this.id = row.id;
       if (this.roleId !== 1) {
-        alert("您不是管理员,无权编辑");
+        alert('您不是管理员,无权编辑');
         return;
       } else {
         this.dialogFormVisible2 = true;
@@ -173,7 +184,7 @@ export default {
       let id = row.id;
       this.dialogTableVisible1 = true;
       axios
-        .get("http://localhost:8088/listPurchaseDetailedPurchaseById/" + id)
+        .get('http://localhost:8088/listPurchaseDetailedPurchaseById/' + id)
         .then((res) => {
           let data = res.data;
           console.log(data);
@@ -181,15 +192,15 @@ export default {
             this.gridData = data;
             this.gridData.forEach((item) => {
               if (item.status == 0) {
-                item.status = "审核中";
+                item.status = '审核中';
               } else if (item.status == 1) {
-                item.status = "审核完成";
+                item.status = '审核通过';
               } else if (item.status == 2) {
-                item.status = "审核不通过";
+                item.status = '审核不通过';
               } else if (item.status == 3) {
-                item.status = "供应商没货";
+                item.status = '供应商没货';
               } else if (item.status == 4) {
-                item.status = "订单完成";
+                item.status = '订单完成';
               }
             });
           }
@@ -207,22 +218,18 @@ export default {
     // 绑定数据
     list() {
       this.axios
-        .get("http://localhost:8088/showAllStoke")
+        .get('http://localhost:8088/showAllStoke')
         .then((res) => {
           let data = res.data;
           if (res.status === 200) {
             this.tableData = data;
             this.tableData.forEach((item) => {
               if (item.status == 0) {
-                item.status = "审核中";
+                item.status = '审核中';
               } else if (item.status == 1) {
-                item.status = "审核完成";
+                item.status = '审核不通过';
               } else if (item.status == 2) {
-                item.status = "审核不通过";
-              } else if (item.status == 3) {
-                item.status = "审核驳回需要修改";
-              } else if (item.status == 4) {
-                item.status = "订单完成";
+                item.status = '审核通过';
               }
             });
           }
@@ -233,11 +240,11 @@ export default {
     },
     //查询id来判断是否能编辑和删除
     tokenPowerId() {
-      let token = sessionStorage.getItem("token");
+      let token = sessionStorage.getItem('token');
       // alert(token)
       this.axios
-        .get("http://localhost:8088/tokenPowerId", {
-          params: { token: token },
+        .get('http://localhost:8088/tokenPowerId', {
+          params: { token: token }
         })
         .then((res) => {
           this.roleId = res.data.roleId;
@@ -245,12 +252,12 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    },
+    }
   },
   created() {
     this.list();
     this.tokenPowerId();
-    this.token = sessionStorage.getItem("token");
-  },
+    this.token = sessionStorage.getItem('token');
+  }
 };
 </script>

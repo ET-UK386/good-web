@@ -545,6 +545,7 @@ export default {
       this.dialogFormVisible2 = true;
       this.$data.contract = JSON.parse(JSON.stringify(row));
       this.goodsku = this.$data.contract;
+      console.log(11111111, this, this.goodsku);
       this.price = this.goodsku.price;
       this.color = this.goodsku.color;
       this.sortName = this.goodsku.sort;
@@ -595,6 +596,7 @@ export default {
       this.goodspu = this.goodskus.goodspu;
       this.warehouse = this.goodskus.warehouse;
       this.vendor = this.goodskus.vendor;
+      this.imgUrls = [];
       this.axios
         .get('http://localhost:8088/uploadImg/findBySkuId/' + row.id)
         .then((res) => {
@@ -620,6 +622,18 @@ export default {
     },
     // 修改商品信息
     update() {
+      switch (this.goodsku.goodspu.statusStr) {
+        case '上架':
+          this.goodsku.goodspu.status = 0;
+          break;
+        case '下架':
+          this.goodsku.goodspu.status = 1;
+          break;
+        case '售罄':
+          this.goodsku.goodspu.status = 2;
+          break;
+      }
+
       this.axios
         .post('http://localhost:8088/goodsku/updateGood', this.goodsku)
         .then((response) => {
