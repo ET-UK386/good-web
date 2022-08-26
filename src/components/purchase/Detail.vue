@@ -123,7 +123,7 @@ export default {
     },
     bindList() {
       this.axios
-        .get('http://localhost:8088/purchase/getPurchase')
+        .get('http://localhost:8088/purchase/getPurchaseNotReviewed')
         .then((res) => {
           let data = res.data;
           if (res.status == 200) {
