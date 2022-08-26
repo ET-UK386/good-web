@@ -1,225 +1,217 @@
 <template>
-  <el-form
-    :model="ruleForm"
-    status-icon
-    :rules="rules"
-    ref="ruleForm"
-    label-width="100px"
-    class="demo-ruleForm"
-  >
-    <el-form-item label="进货商品" prop="goods">
-      <el-select v-model="ruleForm.goods" placeholder="请选择">
-        <el-option
-          v-for="item in ruleForm.goodsOptions"
-          :key="item.id"
-          :label="item.skuName"
-          :value="item.id"
-        ></el-option>
-      </el-select>
-    </el-form-item>
+  <div>
+    <el-button @click="dialogFormVisible = true" type="primary"
+      >添加商品</el-button
+    >
+    <el-button @click="submit" type="success">提 交</el-button>
+    <el-table :data="tableData" border style="width: 100%">
+      <el-table-column fixed prop="skuName" label="商品名称"> </el-table-column>
+      <el-table-column prop="vendorName" label="供应商"> </el-table-column>
+      <el-table-column prop="number" label="进货数量"> </el-table-column>
+      <el-table-column prop="purchasePrice" label="进货单价"> </el-table-column>
+      <el-table-column fixed="right" label="操作" width="100">
+        <template slot-scope="scope">
+          <el-button
+            @click="del(scope.$index, scope.row)"
+            type="text"
+            size="small"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
 
-    <el-form-item label="供应商" prop="vendor">
-      <el-select v-model="ruleForm.vendor" placeholder="请选择">
-        <el-option
-          v-for="item in ruleForm.vendorOptions"
-          :key="item.id"
-          :label="item.vendorName"
-          :value="item.id"
-        ></el-option>
-      </el-select>
-    </el-form-item>
-
-    <el-form-item label="进货数量" prop="number">
-      <el-input
-        placeholder="进货数量"
-        type="text"
-        v-model="ruleForm.number"
-        autocomplete="off"
-        clearable
-        style="width: 400px"
-      ></el-input>
-    </el-form-item>
-
-    <el-form-item label="进货说明" prop="Desc">
-      <el-input
-        placeholder="进货说明"
-        type="text"
-        v-model="ruleForm.Desc"
-        autocomplete="off"
-        clearable
-        style="width: 400px"
-      ></el-input>
-    </el-form-item>
-    <!-- 后续的创建人   创建时间 -->
-
-    <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-      <el-button @click="resetForm('ruleForm')">重置</el-button>
-    </el-form-item>
-  </el-form>
+    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+      <el-form
+        :model="form"
+        :rules="rules"
+        ref="ruleForm"
+        class="demo-ruleForm"
+      >
+        <el-form-item
+          label="进货商品"
+          :label-width="formLabelWidth"
+          prop="skuId"
+        >
+          <el-select v-model="form.skuId" placeholder="请选择商品">
+            <el-option
+              v-for="item in goodskus"
+              :key="item.value"
+              :label="item.skuName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="供应商"
+          :label-width="formLabelWidth"
+          prop="vendorId"
+        >
+          <el-select v-model="form.vendorId" placeholder="请选择供应商">
+            <el-option
+              v-for="item in venders"
+              :key="item.value"
+              :label="item.vendorName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="进货数量"
+          :label-width="formLabelWidth"
+          prop="number"
+        >
+          <el-input v-model.number="form.number" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="进货单价"
+          :label-width="formLabelWidth"
+          prop="purchasePrice"
+        >
+          <el-input v-model="form.purchasePrice" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">关 闭</el-button>
+        <el-button type="primary" @click="add">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
-import axios from "axios";
 export default {
-  data() {
-    /**  进货商品*/
-    // var GoodsVerify = (rule, value, callback) => {
-    //   if (value === "") {
-    //     callback(new Error("请输入进货商品"));
-    //   } else {
-    //     if (this.ruleForm.goods !== "") {
-    //       this.$refs.ruleForm.validateField("DescVerify");
-    //     }
-    //     callback();
-    //   }
-    // };
-
-    /**进货说明 */
-    // var DescVerify = (rule, value, callback) => {
-    //   if (value === "") {
-    //     callback(new Error("请输入进货说明"));
-    //   } else {
-    //     if (this.ruleForm.Desc !== "") {
-    //       this.$refs.ruleForm.validateField("DescVerify");
-    //     }
-    //     callback();
-    //   }
-    // };
-
-    /** 进货数量 */
-    var numberVerify = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入进货数量"));
-      } else {
-        if (this.ruleForm.number !== "") {
-          this.$refs.ruleForm.validateField("numberVerify");
-        }
-        callback();
-      }
-    };
-
-    return {
-      ruleForm: {
-        Desc: "",
-        number: "",
-        goods: "",
-        goodsOptions: [],
-        vendor: "",
-        vendorOptions: [],
-        token: "",
-      },
-
-      rules: {
-        //   进货商品
-        goods: [
-          { required: true, message: "请选择进货商品", trigger: "change" },
-        ],
-        //
-        vendor: [
-          {
-            required: true.valueOf,
-            message: "请选择供应商",
-            trigger: "change",
-          },
-        ],
-        //   进货说明
-        Desc: [
-          { required: true.valueOf, message: "请选择供应商", trigger: "blur" },
-        ],
-        //   进货数量
-        number: [
-          // 纯数字验证
-          { pattern: /^\d+$/, message: "请输入正确进货数量", trigger: "blur" },
-          { validator: numberVerify, trigger: "blur" },
-        ],
-      },
-    };
-  },
   methods: {
-    listGoodSku() {
-      axios
-        .get("http://localhost:8088/listGoodSku")
-        .then((res) => {
-          let data = res.data;
-          if (res.status === 200) {
-            for (let index in data) {
-              this.ruleForm.goodsOptions.push(data[index]);
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    del(index, row) {
+      console.log(index, row);
+      this.tableData.splice(index, 1);
     },
-    listVendor() {
-      axios
-        .get("http://localhost:8088/listVendor")
-        .then((res) => {
-          let data = res.data;
-          if (res.status === 200) {
-            for (let index in data) {
-              this.ruleForm.vendorOptions.push(data[index]);
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    // 提交
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+    add() {
+      this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          //获取token
-          this.ruleForm.token = sessionStorage.getItem("token");
-          // alert("1111111111111111111")
-          // console.log(this.ruleForm)
-          this.axios
-            // .post("http://localhost:8088/addDetailedPurchase", this.ruleForm.token,this.ruleForm.goods,this.ruleForm.number,this.ruleForm.vendor,this.ruleForm.Desc)
-            // .post(
-            //   "http://127.0.0.1:8088/addDetailedPurchase",
-            //   "token = " + this.ruleForm.token,
-            //   "goods = " + this.ruleForm.goods,
-            //   "number = " + this.ruleForm.number,
-            //   "vendor = " + this.ruleForm.vendor,
-            //   "Desc = " + this.ruleForm.Desc
-            // )
-            .get("http://127.0.0.1:8088/addDetailedPurchase", {
-              params: {
-                token: this.ruleForm.token,
-                goods: this.ruleForm.goods,
-                number: this.ruleForm.number,
-                vendor: this.ruleForm.vendor,
-                Desc: this.ruleForm.Desc,
-              },
-            })
-            .then((res) => {
-              if (res.status === 200) {
-                // this.$alert(this.title ? "申请成功" : "申请失败");
-                alert("申请成功");
-                this.ruleForm = "";
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          for (let i = 0; i < this.goodskus.length; i++) {
+            if (this.goodskus[i].id == this.form.skuId) {
+              this.form.skuName = this.goodskus[i].skuName;
+            }
+          }
+          for (let i = 0; i < this.venders.length; i++) {
+            if (this.venders[i].id == this.form.vendorId) {
+              console.log(this.venders[i]);
+              this.form.vendorName = this.venders[i].vendorName;
+            }
+          }
+          this.tableData.push(this.form);
+          console.log(this.tableData);
+          this.form = {};
+          this.dialogFormVisible = false;
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!');
+          return;
         }
       });
     },
-
-    // 重置
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+    submit() {
+      if (this.tableData.length == 0) {
+        this.$alert('请添加商品');
+        return;
+      }
+      this.axios
+        .post('http://localhost:8088/purchase/addPurchase', this.tableData)
+        .then((res) => {
+          if (res.status === 200) {
+            this.$message.success(res.data.message);
+          }
+        });
     },
+    // 页面加载时绑定数据
+    bindData() {
+      this.axios
+        .get('http://localhost:8088/purchase/getGookSku')
+        .then((res) => {
+          let data = res.data;
+          if (res.status === 200) {
+            this.goodskus = data.data;
+          }
+        })
+        .catch((error) => {
+          this.$message.info('网络正忙');
+          console.log(error);
+        });
+
+      this.axios
+        .get('http://localhost:8088/purchase/getVendor')
+        .then((res) => {
+          let data = res.data;
+          if (res.status === 200) {
+            this.venders = data.data;
+          }
+        })
+        .catch((error) => {
+          this.$message.info('网络正忙');
+          console.log(error);
+        });
+    }
+  },
+
+  data() {
+    var checkNumber = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('数量不能为空'));
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error('请输入数量'));
+        } else {
+          if (value <= 0) {
+            callback(new Error('请输入正确数量'));
+          } else {
+            callback();
+          }
+        }
+      }, 100);
+    };
+    var checkPurchasePrice = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('数量不能为空'));
+      }
+      setTimeout(() => {
+        let t1 = /^\d+(\.\d+)?$/;
+        let t2 =
+          /(?:^[1-9]([0-9]+)?(?:\.[0-9]{1,2})?$)|(?:^(?:0)$)|(?:^[0-9]\.[0-9](?:[0-9])?$)/;
+        if (!t1.test(value)) {
+          callback(new Error('金额不合法'));
+        } else {
+          if (!t2.test(value)) {
+            callback(new Error('请只保留两位小数'));
+          } else {
+            callback();
+          }
+        }
+      }, 100);
+    };
+    return {
+      // 添加到流程的信息订单
+      tableData: [],
+      dialogFormVisible: false,
+      // 添加的信息
+      form: {},
+      goodskus: [],
+      venders: [],
+      formLabelWidth: '120px',
+      rules: {
+        skuId: [{ required: true, message: '请选择商品', trigger: 'bulr' }],
+        vendorId: [
+          { required: true, message: '请选择供应商', trigger: 'bulr' }
+        ],
+        number: [{ validator: checkNumber, trigger: 'blur' }],
+        purchasePrice: [{ validator: checkPurchasePrice, trigger: 'blur' }]
+      }
+    };
   },
   created() {
-    this.listGoodSku();
-    this.listVendor();
-  },
+    this.bindData();
+    console.log(this.goodskus);
+  }
 };
 </script>

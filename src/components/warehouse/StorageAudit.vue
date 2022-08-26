@@ -70,7 +70,6 @@
           <td class="right">价格</td>
           <td>
             <input
-              class="b"
               readonly="readonly"
               type="text"
               v-model="gridData.detailedPurchase.purchasePrice"
@@ -118,9 +117,7 @@ export default {
     endit() {
       let readonly = document.getElementsByClassName('b');
       readonly[0].removeAttribute('readonly');
-      readonly[1].removeAttribute('readonly');
       readonly[0].style.border = '1px solid black';
-      readonly[1].style.border = '1px solid black';
       this.gridData.status = 5;
     },
     // 通过
