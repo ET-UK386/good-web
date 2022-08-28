@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="goodsku.skuName" label="商品名称" width="180">
+      <el-table-column prop="skuNameStr" label="商品名称" width="180">
       </el-table-column>
       <el-table-column prop="createUser.username" label="负责人" width="180">
       </el-table-column>
@@ -20,32 +20,25 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+    <el-dialog title="详细列表" :visible.sync="dialogTableVisible">
       <el-table :data="gridData">
+        <el-table-column property="batch" label="批次"></el-table-column>
         <el-table-column
-          property="detailedPurchase.batch"
-          label="批次"
-          width="150"
-        ></el-table-column>
-        <el-table-column
-          property="goodsku.skuName"
+          property="skuNameStr"
           label="商品名称"
-          width="150"
         ></el-table-column>
         <el-table-column
-          property="detailedPurchase.vendor.vendorName"
+          property="detailedWarehousing.vendor.vendorName"
           label="供应商"
-          width="150"
         ></el-table-column>
         <el-table-column
           property="warehouseAddress"
           label="地址"
-          width="150"
         ></el-table-column>
+        <el-table-column property="stockNumber" label="数量"></el-table-column>
         <el-table-column
-          property="stockNumber"
-          label="数量"
-          width="150"
+          property="detailedWarehousing.purchasePrice"
+          label="进货单价"
         ></el-table-column>
       </el-table>
     </el-dialog>

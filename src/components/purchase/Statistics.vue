@@ -45,7 +45,7 @@
     <!-- 主体展示点击查看操作-->
     <el-dialog title="详细订单" :visible.sync="dialogTableVisible">
       <el-table :data="gridData" border style="width: 100%">
-        <el-table-column fixed prop="skuName" label="商品名称">
+        <el-table-column fixed prop="skuNameStr" label="商品名称">
         </el-table-column>
         <el-table-column prop="vendorName" label="供应商"> </el-table-column>
         <el-table-column prop="number" label="进货数量"> </el-table-column>
@@ -147,6 +147,7 @@ export default {
     handleClick(row) {
       this.dialogTableVisible = true;
       this.show(row);
+      console.log(this.gridData);
     },
     /**主体展示修改按钮 */
     audit(row) {
@@ -183,9 +184,9 @@ export default {
         .then((res) => {
           if (res.status === 200) {
             this.$message.success(res.data.message);
+            this.tableData = {};
           }
         });
-      this.bindList();
       this.dialogTableVisible1 = false;
     },
     /**修改流程中的添加按钮操作 */
@@ -195,6 +196,7 @@ export default {
           for (let i = 0; i < this.goodskus.length; i++) {
             if (this.goodskus[i].id == this.form.skuId) {
               this.form.skuName = this.goodskus[i].skuName;
+              this.form.skuNameStr = this.goodskus[i].skuNameStr;
             }
           }
           for (let i = 0; i < this.venders.length; i++) {
@@ -236,8 +238,10 @@ export default {
             this.gridData = res.data.data;
             for (let i = 0; i < this.gridData.length; i++) {
               this.gridData[i].skuName = this.gridData[i].goodsku.skuName;
+              this.gridData[i].skuNameStr = this.gridData[i].goodsku.skuNameStr;
               this.gridData[i].vendorName = this.gridData[i].vendor.vendorName;
             }
+            console.log(this.gridData);
           }
         })
         .catch(() => {

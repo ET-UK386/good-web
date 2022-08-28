@@ -27,7 +27,7 @@
 
     <el-dialog title="详细订单" :visible.sync="dialogTableVisible">
       <el-table :data="gridData" border style="width: 100%">
-        <el-table-column fixed prop="goodsku.skuName" label="商品名称">
+        <el-table-column fixed prop="goodsku.skuNameStr" label="商品名称">
         </el-table-column>
         <el-table-column prop="vendor.vendorName" label="供应商">
         </el-table-column>
@@ -104,7 +104,7 @@ export default {
                 )
                 .then((res) => {
                   if (res.status === 200) {
-                    this.$message.success('入库成功');
+                    this.$message.success('入库流程订单创建成功');
                   }
                 });
               this.bindList();
