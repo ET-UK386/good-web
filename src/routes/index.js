@@ -95,6 +95,11 @@ export default new Router({
           path: '/Commodity/Message',
           component: () => import('@/components/commodity/Message'),
           name: '商品信息'
+        },
+        {
+          path: '/Commodity/goodspu',
+          component: () => import('@/components/commodity/goodspu'),
+          name: '商品spu信息'
         }
       ]
     },

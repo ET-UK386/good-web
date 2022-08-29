@@ -22,30 +22,19 @@
       >
     </div>
 
-
-
-
     <!-- 商品信息展示 -->
     <el-table :data="goodskus" stripe style="width: 100%">
-      <el-table-column prop="skuName" label="商品名" width="120   ">
+      <el-table-column prop="goodspu.goodName" label="商品名" width="120   ">
       </el-table-column>
       <el-table-column prop="skuDesc" label="商品描述" width="95">
       </el-table-column>
       <el-table-column prop="goodspu.brand" label="品牌商" width="80">
       </el-table-column>
-      <el-table-column prop="goodspu.statusStr" label="上架状态" width="80">
-      </el-table-column>
-      <el-table-column
-        prop="goodspu.sort.sortName"
-        label="所属分类"
-        width="95"
-      >
+      <el-table-column prop="sort.sortName" label="所属分类" width="95">
       </el-table-column>
       <el-table-column prop="color.colorName" label="颜色" width="80">
       </el-table-column>
       <el-table-column prop="price.price" label="价格" width="80">
-      </el-table-column>
-      <el-table-column prop="warehouse.stockNumber" label="库存" width="80">
       </el-table-column>
       <el-table-column prop="user.username" label="创建人" width="80">
       </el-table-column>
@@ -62,8 +51,12 @@
             circle
             @click="serachForAll(scope.row)"
           ></el-button>
-          <el-button type="primary" icon="el-icon-edit" circle 
-          @click="edit(scope.row)"></el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            circle
+            @click="edit(scope.row)"
+          ></el-button>
           <el-button
             type="danger"
             icon="el-icon-delete"
@@ -74,224 +67,255 @@
       </el-table-column>
     </el-table>
 
-
-
-
-
     <!-- 详细信息显示 -->
-    <el-dialog
-    title="详细信息显示"
-      :visible.sync="dialogFormVisible1"
-    >
-    <el-form :model="goodskus"  >
-        <el-form-item  label="商品名" :label-width="formLabelWidth">
-          <el-input  v-model="goodskus.skuName" readonly="readonly" autocomplete="off">
+    <el-dialog title="详细信息显示" :visible.sync="dialogFormVisible1">
+      <el-form :model="goodskus">
+        <el-form-item label="商品名" :label-width="formLabelWidth">
+          <el-input
+            v-model="goodspu.goodName"
+            readonly="readonly"
+            autocomplete="off"
+          >
           </el-input>
         </el-form-item>
-        <el-form-item label="商品描述" :label-width="formLabelWidth" >
-          <el-input v-model="goodskus.skuDesc" readonly="readonly" autocomplete="off"></el-input>
+        <el-form-item label="商品描述" :label-width="formLabelWidth">
+          <el-input
+            v-model="goodskus.skuDesc"
+            readonly="readonly"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-         <el-form-item label="价格" :label-width="formLabelWidth" >
-          <el-input v-model="price.price" readonly="readonly" autocomplete="off"></el-input>
+        <el-form-item label="价格" :label-width="formLabelWidth">
+          <el-input
+            v-model="price.price"
+            readonly="readonly"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="颜色" :label-width="formLabelWidth" >
-          <el-input v-model="color.colorName" readonly="readonly" autocomplete="off"></el-input>
+        <el-form-item label="颜色" :label-width="formLabelWidth">
+          <el-input
+            v-model="color.colorName"
+            readonly="readonly"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="所属分类" :label-width="formLabelWidth" >
-          <el-input v-model="sort.sortName" readonly="readonly" autocomplete="off"></el-input>
+        <el-form-item label="所属分类" :label-width="formLabelWidth">
+          <el-input
+            v-model="goodskus.sort.sortName"
+            readonly="readonly"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="单位" :label-width="formLabelWidth" >
-          <el-input v-model="units.unitsName" readonly="readonly" autocomplete="off"></el-input>
+        <el-form-item label="单位" :label-width="formLabelWidth">
+          <el-input
+            v-model="units.unitsName"
+            readonly="readonly"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="上架状态" :label-width="formLabelWidth" >
-          <el-input v-model="goodspu.statusStr" readonly="readonly" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="库存" :label-width="formLabelWidth" >
-          <el-input v-model="warehouse.stockNumber" readonly="readonly" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="销量" :label-width="formLabelWidth" >
-          <el-input v-model="goodskus.salesVolume" readonly="readonly" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="品牌商" :label-width="formLabelWidth" >
-          <el-input v-model="goodspu.brand" readonly="readonly" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="生产商" :label-width="formLabelWidth" >
-          <el-input v-model="goodskus.manufacturer" readonly="readonly" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="供应商" :label-width="formLabelWidth" >
-          <el-input v-model="vendor.vendorName" readonly="readonly" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="供应商电话" :label-width="formLabelWidth" >
-          <el-input v-model="vendor.tel" readonly="readonly" autocomplete="off"></el-input>
+        <el-form-item label="生产商" :label-width="formLabelWidth">
+          <el-input
+            v-model="goodspu.brand"
+            readonly="readonly"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
-      </el-dialog>
-
-
-
-
-
-
+    </el-dialog>
     <!-- 新增 -->
-    <el-dialog
-    title="新增商品"
-      :visible.sync="dialogFormVisible"
-    >
-      <el-form :model="goodsku" :rules="rules">
+    <el-dialog title="新增商品" :visible.sync="dialogFormVisible">
+      <el-form :model="goodsku">
         <el-form-item hidden label="id" :label-width="formLabelWidth">
-          <el-input  v-model="goodsku.id" readonly="readonly" autocomplete="off">
+          <el-input v-model="goodsku.id" readonly="readonly" autocomplete="off">
           </el-input>
         </el-form-item>
-        <el-form-item label="商品名" :label-width="formLabelWidth" prop="skuName">
-          <el-input v-model="goodsku.skuName" autocomplete="off"></el-input>
+        <el-form-item
+          label="商品名"
+          :label-width="formLabelWidth"
+          prop="skuName"
+        >
+          <el-select v-model="goodsku.spuId" placeholder="请选择商品">
+            <el-option
+              v-for="item in goodspus"
+              :key="item.id"
+              :label="item.goodName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="商品描述" :label-width="formLabelWidth" prop="skuDesc">
+        <el-form-item
+          label="商品描述"
+          :label-width="formLabelWidth"
+          prop="skuDesc"
+        >
           <el-input v-model="goodsku.skuDesc" autocomplete="off"></el-input>
         </el-form-item>
-         <el-form-item label="价格" :label-width="formLabelWidth" prop="price.price">
+        <el-form-item
+          label="价格"
+          :label-width="formLabelWidth"
+          prop="price.price"
+        >
           <el-input v-model="goodsku.price.price" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="颜色" :label-width="formLabelWidth" prop="color.colorName">
-          <el-select v-model="goodsku.color.colorName" placeholder="请选择颜色">
-            <el-option label="远峰蓝" value="远峰蓝">远峰蓝</el-option>
-            <el-option label="中国红" value="中国红">中国红</el-option>
-            <el-option label="珠玉白" value="珠玉白">珠玉白</el-option>
-            <el-option label="土豪金" value="土豪金">土豪金</el-option>
-            <el-option label="银色" value="银色">银色</el-option>
-            <el-option label="白色" value="白色">白色</el-option>
-            <el-option label="黑色" value="黑色">黑色</el-option>
-            <el-option label="其他" value="其他">其他</el-option>
+        <el-form-item
+          label="颜色"
+          :label-width="formLabelWidth"
+          prop="colorName"
+        >
+          <el-select v-model="goodsku.colorId" placeholder="请选择颜色">
+            <el-option
+              v-for="item in colors"
+              :key="item.id"
+              :label="item.colorName"
+              :value="item.id"
+            ></el-option>
           </el-select>
+          <el-button plain @click="dialogFormVisible3 = true"
+            >其它颜色</el-button
+          >
         </el-form-item>
-        <el-form-item label="所属分类" :label-width="formLabelWidth" prop="goodspu.sort.sortName">
-          <el-select v-model="goodsku.goodspu.sort.sortName" placeholder="请选择分类">
-            <el-option label="手机" value="手机">手机</el-option>
-            <el-option label="电器" value="电器">家电</el-option>
-            <el-option label="穿戴" value="穿戴">穿戴</el-option>
-            <el-option label="电脑" value="电脑">电脑</el-option>
-            <el-option label="电视" value="电视">电视</el-option>
+        <el-form-item
+          label="所属分类"
+          :label-width="formLabelWidth"
+          prop="sort.sortName"
+        >
+          <el-select v-model="goodsku.sortId" placeholder="请选择分类">
+            <el-option
+              v-for="item in sorts"
+              :key="item.id"
+              :label="item.sortName"
+              :value="item.id"
+            ></el-option>
           </el-select>
+          <el-button plain @click="dialogFormVisible4 = true"
+            >其它分类</el-button
+          >
         </el-form-item>
-        <el-form-item label="单位" :label-width="formLabelWidth" prop="units.unitsName">
-          <el-select v-model="goodsku.units.unitsName" placeholder="请选择单位">
-            <el-option label="个" value="个">个</el-option>
-            <el-option label="件" value="件">件</el-option>
-            <el-option label="台" value="台">台</el-option>
-            <el-option label="部" value="部">部</el-option>
+        <el-form-item
+          label="单位"
+          :label-width="formLabelWidth"
+          prop="units.unitsName"
+        >
+          <el-select v-model="goodsku.companyId" placeholder="请选择单位">
+            <el-option
+              v-for="item in unitss"
+              :key="item.id"
+              :label="item.unitsName"
+              :value="item.id"
+            ></el-option>
           </el-select>
+          <el-button plain @click="dialogFormVisible5 = true"
+            >其它单位</el-button
+          >
         </el-form-item>
-        <el-form-item label="上架状态" :label-width="formLabelWidth" prop="goodspu.status">
-          <el-select v-model="goodsku.goodspu.status" placeholder="请选择状态">
-            <el-option label="上架" value="0">上架</el-option>
-            <el-option label="下架" value="1">下架</el-option>
-            <el-option label="售罄" value="2">售罄</el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="库存" :label-width="formLabelWidth" prop="warehouse.stockNumber">
-          <el-input v-model="goodsku.warehouse.stockNumber" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="销量" :label-width="formLabelWidth" prop="salesVolume">
-          <el-input v-model="goodsku.salesVolume" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="品牌商" :label-width="formLabelWidth" prop="goodspu.brand">
-          <el-input v-model="goodsku.goodspu.brand" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="生产商" :label-width="formLabelWidth" prop="manufacturer">
-          <el-input v-model="goodsku.manufacturer" autocomplete="off"></el-input>
-        </el-form-item>
-         <el-form-item label="供应商" :label-width="formLabelWidth" prop="vendor.vendorName">
-          <el-input v-model="goodsku.vendor.vendorName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="供应商电话" :label-width="formLabelWidth" prop="vendor.tel">
-          <el-input v-model="goodsku.vendor.tel" autocomplete="off"></el-input>
+        
+        <el-form-item
+          label="生产商"
+          :label-width="formLabelWidth"
+          prop="goodspu.brand"
+        >
+          <el-input
+            v-model="goodspu.brand"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="add">确 定</el-button>
       </div>
-    </el-dialog>  
-
-
-
-
-
-
-
-
-     <!-- 修改 -->
-    <el-dialog
-      title="修改商品"
-      :visible.sync="dialogFormVisible2"
-    >
-      <el-form :model="goodsku" >
-      <el-form-item hidden label="id" :label-width="formLabelWidth">
-          <el-input  v-model="goodsku.id" readonly="readonly" autocomplete="off">
+    </el-dialog>
+    <!-- 修改 -->
+    <el-dialog title="修改商品" :visible.sync="dialogFormVisible2">
+      <el-form :model="goodsku">
+        <el-form-item hidden label="id" :label-width="formLabelWidth">
+          <el-input v-model="goodsku.id" readonly="readonly" autocomplete="off">
           </el-input>
         </el-form-item>
-        <el-form-item  label="商品名" :label-width="formLabelWidth">
-          <el-input  v-model="goodsku.skuName" autocomplete="off">
-          </el-input>
+        <el-form-item
+          label="商品名"
+          :label-width="formLabelWidth"
+          prop="goodName"
+        >
+          <el-select v-model="goodsku.spuId" placeholder="请输入商品名">
+            <el-option
+              v-for="item in goodspus"
+              :key="item.id"
+              :label="item.goodName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="商品描述" :label-width="formLabelWidth" >
+        <el-form-item
+          label="商品描述"
+          :label-width="formLabelWidth"
+          prop="skuDesc"
+        >
           <el-input v-model="goodsku.skuDesc" autocomplete="off"></el-input>
         </el-form-item>
-         <el-form-item label="价格" :label-width="formLabelWidth" >
+        <el-form-item
+          label="价格"
+          :label-width="formLabelWidth"
+          prop="price.price"
+        >
           <el-input v-model="goodsku.price.price" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="颜色" :label-width="formLabelWidth" prop="color.colorName">
-          <el-select v-model="goodsku.color.colorName" placeholder="请选择颜色">
-            <el-option label="远峰蓝" value="远峰蓝">远峰蓝</el-option>
-            <el-option label="中国红" value="中国红">中国红</el-option>
-            <el-option label="珠玉白" value="珠玉白">珠玉白</el-option>
-            <el-option label="土豪金" value="土豪金">土豪金</el-option>
-            <el-option label="银色" value="银色">银色</el-option>
-            <el-option label="白色" value="白色">白色</el-option>
-            <el-option label="黑色" value="黑色">黑色</el-option>
-            <el-option label="其他" value="其他">其他</el-option>
+        <el-form-item
+          label="颜色"
+          :label-width="formLabelWidth"
+          prop="colorName"
+        >
+          <el-select v-model="goodsku.colorId" placeholder="请选择颜色">
+            <el-option
+              v-for="item in colors"
+              :key="item.id"
+              :label="item.colorName"
+              :value="item.id"
+            ></el-option>
           </el-select>
+          
         </el-form-item>
-        <el-form-item label="所属分类" :label-width="formLabelWidth" prop="goodspu.sort.sortName">
-          <el-select v-model="goodsku.goodspu.sort.sortName" placeholder="请选择分类">
-            <el-option label="手机" value="手机">手机</el-option>
-            <el-option label="电器" value="电器">电器</el-option>
-            <el-option label="穿戴" value="穿戴">穿戴</el-option>
-            <el-option label="电脑" value="电脑">电脑</el-option>
-            <el-option label="电视" value="电视">电视</el-option>
+        <el-form-item
+          label="所属分类"
+          :label-width="formLabelWidth"
+          prop="sort.sortName"
+        >
+          <el-select v-model="goodsku.goodspu.sortId" placeholder="请选择分类">
+            <el-option
+              v-for="item in sorts"
+              :key="item.id"
+              :label="item.sortName"
+              :value="item.id"
+            ></el-option>
           </el-select>
+
+          
         </el-form-item>
-        <el-form-item label="单位" :label-width="formLabelWidth" prop="units.unitsName">
-          <el-select v-model="goodsku.units.unitsName" placeholder="请选择单位">
-            <el-option label="个" value="个">个</el-option>
-            <el-option label="件" value="件">件</el-option>
-            <el-option label="台" value="台">台</el-option>
-            <el-option label="部" value="部">部</el-option>
+        <el-form-item
+          label="单位"
+          :label-width="formLabelWidth"
+          prop="units.unitsName"
+        >
+          <el-select v-model="goodsku.companyId" placeholder="请选择单位">
+            <el-option
+              v-for="item in unitss"
+              :key="item.id"
+              :label="item.unitsName"
+              :value="item.id"
+            ></el-option>
           </el-select>
+          
         </el-form-item>
-        <el-form-item label="上架状态" :label-width="formLabelWidth" prop="goodspu.status">
-          <el-select v-model="goodsku.goodspu.statusStr" placeholder="请选择状态">
-            <el-option label="上架" value="上架">上架</el-option>
-            <el-option label="下架" value="下架">下架</el-option>
-            <el-option label="售罄" value="售罄">售罄</el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="库存" :label-width="formLabelWidth" >
-          <el-input v-model="warehouse.stockNumber" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="销量" :label-width="formLabelWidth" >
-          <el-input v-model="goodsku.salesVolume" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="品牌商" :label-width="formLabelWidth" >
-          <el-input v-model="goodspu.brand" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="生产商" :label-width="formLabelWidth" >
-          <el-input v-model="goodsku.manufacturer" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="供应商" :label-width="formLabelWidth" >
-          <el-input v-model="goodsku.vendor.vendorName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="供应商电话" :label-width="formLabelWidth" >
-          <el-input v-model="goodsku.vendor.tel" autocomplete="off"></el-input>
+        
+        <el-form-item
+          label="生产商"
+          :label-width="formLabelWidth"
+          prop="goodspu.brand"
+        >
+          <el-input
+            v-model="goodsku.goodspu.brand"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -299,89 +323,116 @@
         <el-button type="primary" @click="update">确 定</el-button>
       </div>
     </el-dialog>
+
+
+
+
+
+    <el-dialog title="修改顔色" :visible.sync="dialogFormVisible3">
+      <el-form ref="form" :model="color" label-width="80px">
+        <el-form-item label="颜色">
+          <el-input v-model="color.colorName"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="addcolor" >添加</el-button>
+          <el-button @click="dialogFormVisible3 = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+
+    <el-dialog title="修改分类" :visible.sync="dialogFormVisible4">
+      <el-form ref="form" :model="sort" label-width="80px">
+        <el-form-item label="分类">
+          <el-input v-model="sort.sortName"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="addsort" >添加</el-button>
+          <el-button @click="dialogFormVisible4 = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog title="修改单位" :visible.sync="dialogFormVisible5">
+      <el-form ref="form" :model="units" label-width="80px">
+        <el-form-item label="单位">
+          <el-input v-model="units.unitsName"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="addunits">添加</el-button>
+          <el-button @click="dialogFormVisible5 = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
 export default {
   data() {
-    var checkphone = (rule, value, callback) => {
-            let ragEamil = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/;
-        if (!ragEamil.test(value)) {
-          return callback(new Error('手机号格式不正确'));
-        }else{
-            callback()
-        }
-        }
     return {
-       goodskus: [],
-       goodskutwo: [],
-       price:{},
-       color:{},
-       sort:{},
-       units:{},
-       goodspu:{},
-       warehouse:{},
-       vendor:{},
+      skuName: "",
+      sortName: "",
+      goodskus: [],
+      price: {},
+      color: {token:'',},
+      sort: {token:'',},
+      units: { unitsName: "" ,token:'',},
+      goodspu: {},
+      token:'',
       dialogFormVisible1: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
+      dialogFormVisible3: false,
+      dialogFormVisible4: false,
+      dialogFormVisible5: false,
       goodskuAll: [],
-      skuName: "",
-      sortName: "",
+      goodName: [],
       formLabelWidth: "120px",
-      goodsku: {
-        id:"",
-        skuName:"",
-        skuDesc:"",
-        price:{price:''},
-        color:{colorName:''},
-        goodspu:{id:'',brand:'',status:'',sort:{sortName:''},},
-        units:{unitsName:''},
-        warehouse:{stockNumber:''},
-        salesVolume:"",
-        manufacturer:"",
-        vendor:{vendorName:'',tel:''},
+       goodsku: {
+        price:{price:'',},
+        goodspu:{brand:'',}
       },
+      goodspus:[],
+      colors:[],
+      sorts:[],
+      unitss:[],
       
       rules: {
         skuName: [{ required: true, message: "请输入商品名", trigger: "blur" }],
-        skuDesc: [{ required: true, message: "请输入商品描述", trigger: "blur" }],
-        ['price.price']: [{ required: true, message: "请输入价格", trigger: "blur" }],
-        ['color.colorName']: [{required: true, message: "请输入颜色", trigger: "blur" }],
-        ['goodspu.sort.sortName']: [{required: true, validator: "请输入所属分类", trigger: "blur" }],
-        ['units.unitsName']: [{required: true,  message: "请输入单位", trigger: "blur" }],
-        ['goodspu.status']: [{ required: true, message: "请输入上架状态", trigger: "blur" }],
-        ['warehouse.stockNumber']: [{ required: true, message: "请输入库存", trigger: "blur" }],
-        salesVolume: [{ required: true, message: "请输入销量", trigger: "blur" }],
-        ['goodspu.brand']: [{ required: true, message: "请输入品牌商", trigger: "blur" }],
-        manufacturer: [{ required: true, message: "请输入生产商", trigger: "blur" }],
-        ['vendor.vendorName']: [{ required: true, message: "请输入供应商", trigger: "blur" }],
-        ['vendor.tel']: [{ validator:checkphone }],
+        skuDesc: [
+          { required: true, message: "请输入商品描述", trigger: "blur" },
+        ],
+        ["price.price"]: [
+          { required: true, message: "请输入价格", trigger: "blur" },
+        ],
+        ["color.colorName"]: [
+          { required: true, message: "请输入颜色", trigger: "blur" },
+        ],
+        ["sort.sortName"]: [
+          { required: true, validator: "请输入所属分类", trigger: "blur" },
+        ],
+        ["units.unitsName"]: [
+          { required: true, message: "请输入单位", trigger: "blur" },
+        ],
+        ["goodspu.status"]: [
+          { required: true, message: "请输入上架状态", trigger: "blur" },
+        ],
+        ["goodspu.brand"]: [
+          { required: true, message: "请输入品牌商", trigger: "blur" },
+        ],
       },
     };
   },
-  
+
   methods: {
-    //修改
-    edit(row) {
-      this.dialogFormVisible2 = true;
-      this.goodsku = row;
-      this.price = this.goodsku.price
-      this.color = this.goodsku.color
-      this.sortName = this.goodsku.sort;
-      this.units = this.goodsku.units
-      this.goodspu = this.goodsku.goodspu
-      this.warehouse = this.goodsku.warehouse
-      this.vendor = this.goodsku.vendor
-    },
     //添加
     add() {
-            this.dialogFormVisible = true;
+      this.dialogFormVisible = true;
       // let token =  sessionStorage.getItem("token",response.data.token);
       this.axios
-        .post("http://localhost:8088/goodsku/insertGood",this.goodsku)
+        .post("http://localhost:8088/goodsku/insertGood", this.goodsku)
         .then((response) => {
-          if (response.status === 200) {
+          if (response.data.code === 200) {
             this.$alert("添加成功");
             this.dialogFormVisible = false;
             this.list();
@@ -393,32 +444,127 @@ export default {
           console.log(error);
         });
     },
+    addcolor(){
+      this.color.token = sessionStorage.getItem("token");
+      this.axios.post("http://localhost:8088/goodsku/insertColor",this.color)
+      .then((response)=>{
+        if(response.data.code === 200){
+            this.$alert("添加成功");
+            this.dialogFormVisible3 = false;
+            this.color={
+              colorNmae:'',
+            },
+            this.list();
+        } else {
+            this.$message.error(response.data.message);
+          }
+      })
+    },
+    addsort(){
+      this.sort.token = sessionStorage.getItem("token");
+      this.axios.post("http://localhost:8088/goodsku/insertSort",this.sort)
+      .then((response)=>{
+        if(response.data.code === 200){
+            this.$alert("添加成功");
+            this.dialogFormVisible3 = false;
+            this.sort={
+              sortName:'',
+            },
+            this.list();
+        } else {
+            this.$message.error(response.data.message);
+          }
+      })
+    },
+    addunits(){
+      this.units.token = sessionStorage.getItem("token");
+      this.axios.post("http://localhost:8088/goodsku/insertUnits",this.units)
+      .then((response)=>{
+        if(response.data.code === 200){
+            this.$alert("添加成功");
+            this.dialogFormVisible4 = false;
+            this.units={
+              unitsName:'',
+            },
+            this.list();
+        } else {
+            this.$message.error(response.data.message);
+          }
+      })
+    },
+    // 查询商品信息
     // 查询商品信息
     list() {
       this.axios
-        .get("http://localhost:8088/goodsku/listGoodsku"
-        )
+        .get("http://localhost:8088/goodsku/listGoodsku")
         .then((response) => {
           if (response.status === 200) {
-            console.log(response)
+            // console.log(response.data)
+            // console.log(response.data[3]);
             this.goodskus = response.data;
-            this.total = response.data.count;
           }
         });
+    },
+    listColor(){
+      this.axios.get("http://localhost:8088/goodsku/listColor").then((response)=>{
+        let data = response.data;
+        if(response.status === 200){
+          this.colors = data;
+        }
+      })
+    },
+   listSort(){
+      this.axios.get("http://localhost:8088/goodsku/listSort").then((response)=>{
+        let data = response.data;
+        if(response.status === 200){
+           this.sorts = data;
+        }
+      })
+    },
+    listGoodSpus(){
+      this.axios.get("http://localhost:8088/goodsku/listGoodSpus").then((response)=>{
+        let data = response.data;
+        if(response.status === 200){
+          this.goodspus = data; 
+        }
+      })
+    },
+    
+   listUnits(){
+      this.axios.get("http://localhost:8088/goodsku/listUnits").then((response)=>{
+        let data = response.data;
+        if(response.status === 200){
+          this.unitss = data;
+        }
+      })
+    },
+    //修改
+    edit(row) {
+      this.dialogFormVisible2 = true;
+      this.goodsku = row
+      this.axios.post("http://localhost:8088/goodsku/listByid",this.goodsku)
+      .then((response)=>{
+        if(response.status === 200){
+          console.log(response.data)
+          this.goodsku = response.data;
+          this.goodsku.price = response.data.price;
+          console.log(response.data)
+          this.goodsku.goodspu = response.data.goodspu;
+          console.log(222)
+        }
+      })
     },
     // 查询商品详细信息
     serachForAll(row) {
       this.dialogFormVisible1 = true;
       this.goodskus = row;
-      this.price = this.goodskus.price
-      this.color = this.goodskus.color
-      this.sort = this.goodskus.goodspu.sort
-      this.units = this.goodskus.units
-      this.goodspu = this.goodskus.goodspu
-      this.warehouse = this.goodskus.warehouse
-      this.vendor = this.goodskus.vendor
+      this.price = this.goodskus.price;
+      this.color = this.goodskus.color;
+      this.sort = this.goodskus.sort;
+      this.units = this.goodskus.units;
+      this.goodspu = this.goodskus.goodspu;
     },
-    //根据商品名或分类名查询 
+    //根据商品名或分类名查询
     search() {
       this.axios
         .get("http://localhost:8088/goodsku/fingByskuNameorSortName", {
@@ -435,12 +581,13 @@ export default {
         });
     },
     // 修改商品信息
-    update(){
-      this.axios.post("http://localhost:8088/goodsku/updateGood",this.goodsku).then((response)=>{
-        if (response.status === 200) {
-          console.log(response)
+    update() {
+      this.axios
+        .post("http://localhost:8088/goodsku/updateGood", this.goodsku)
+        .then((response) => {
+          if (response.status === 200) {
             this.$alert("修改成功");
-            this.dialogFormVisible = false;
+            this.dialogFormVisible2 = false;
             this.list();
           } else {
             this.$message.error(response.data.message);
@@ -478,6 +625,10 @@ export default {
   },
   created() {
     this.list();
+    this.listGoodSpus();
+    this.listColor()
+    this.listSort()
+    this.listUnits()
   },
 };
 </script>
