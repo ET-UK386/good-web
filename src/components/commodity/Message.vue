@@ -24,7 +24,7 @@
 
     <!-- 商品信息展示 -->
     <el-table :data="goodskus" stripe style="width: 100%">
-      <el-table-column prop="goodspu.goodName" label="商品名" width="120   ">
+      <el-table-column prop="skuName" label="商品名" width="120   ">
       </el-table-column>
       <el-table-column prop="skuDesc" label="商品描述" width="95">
       </el-table-column>
@@ -79,7 +79,7 @@
       <el-form :model="goodskus">
         <el-form-item label="商品名" :label-width="formLabelWidth">
           <el-input
-            v-model="goodspu.goodName"
+            v-model="goodskus.skuName"
             readonly="readonly"
             autocomplete="off"
           >
@@ -139,7 +139,7 @@
         <el-form-item
           label="商品名"
           :label-width="formLabelWidth"
-          prop="skuName"
+
         >
           <el-select v-model="goodsku.spuId" placeholder="请选择商品">
             <el-option
@@ -149,6 +149,16 @@
               :value="item.id"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item
+          label="商品名"
+          :label-width="formLabelWidth"
+          prop="skuName"
+        >
+          <el-input
+            v-model="goodsku.skuName"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="商品描述"
@@ -398,6 +408,7 @@ export default {
       units: { unitsName: "" ,token:'',},
       goodspu: {},
       token:'',
+      // dialogVisible3 = false,
       dialogFormVisible1: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
