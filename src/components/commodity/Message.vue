@@ -31,7 +31,6 @@
       <el-table-column prop="goodspu.brand" label="品牌商" width="80">
       </el-table-column>
       <el-table-column prop="sort.sortName" label="所属分类" width="95">
-
       </el-table-column>
       <el-table-column prop="color.colorName" label="颜色" width="80">
       </el-table-column>
@@ -128,6 +127,16 @@
           ></el-input>
         </el-form-item>
       </el-form>
+
+      <!--图片展示-->
+      <div class="demo-image__preview">
+        <el-image
+          style="width: 300px; height: 300px"
+          :src="imgUrls[0]"
+          :preview-src-list="imgUrls"
+        >
+        </el-image>
+      </div>
     </el-dialog>
     <!-- 新增 -->
     <el-dialog title="新增商品" :visible.sync="dialogFormVisible">
@@ -215,16 +224,13 @@
             >其它单位</el-button
           >
         </el-form-item>
-        
+
         <el-form-item
           label="生产商"
           :label-width="formLabelWidth"
           prop="goodspu.brand"
         >
-          <el-input
-            v-model="goodspu.brand"
-            autocomplete="off"
-          ></el-input>
+          <el-input v-model="goodspu.brand" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -280,7 +286,6 @@
               :value="item.id"
             ></el-option>
           </el-select>
-          
         </el-form-item>
         <el-form-item
           label="所属分类"
@@ -295,8 +300,6 @@
               :value="item.id"
             ></el-option>
           </el-select>
-
-          
         </el-form-item>
         <el-form-item
           label="单位"
@@ -311,9 +314,8 @@
               :value="item.id"
             ></el-option>
           </el-select>
-          
         </el-form-item>
-        
+
         <el-form-item
           label="生产商"
           :label-width="formLabelWidth"
@@ -331,22 +333,17 @@
       </div>
     </el-dialog>
 
-
-
-
-
     <el-dialog title="修改顔色" :visible.sync="dialogFormVisible3">
       <el-form ref="form" :model="color" label-width="80px">
         <el-form-item label="颜色">
           <el-input v-model="color.colorName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addcolor" >添加</el-button>
+          <el-button type="primary" @click="addcolor">添加</el-button>
           <el-button @click="dialogFormVisible3 = false">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
-
 
     <el-dialog title="修改分类" :visible.sync="dialogFormVisible4">
       <el-form ref="form" :model="sort" label-width="80px">
@@ -354,7 +351,7 @@
           <el-input v-model="sort.sortName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addsort" >添加</el-button>
+          <el-button type="primary" @click="addsort">添加</el-button>
           <el-button @click="dialogFormVisible4 = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -373,7 +370,7 @@
     </el-dialog>
 
     <!-- 上传图片标签-->
-    <el-dialog :title="goodName" :visible.sync="dialogVisible3" width="30%">
+    <el-dialog :title="goodName1" :visible.sync="dialogVisible3" width="30%">
       <div>
         <span class="add">上传图片</span>
         <input type="file" @change="getFile($event)" />
@@ -389,57 +386,64 @@
 export default {
   data() {
     return {
-      skuName: "",
-      sortName: "",
+      skuName: '',
+      sortName: '',
       goodskus: [],
       price: {},
-      color: {token:'',},
-      sort: {token:'',},
-      units: { unitsName: "" ,token:'',},
+      color: { token: '' },
+      sort: { token: '' },
+      units: { unitsName: '', token: '' },
       goodspu: {},
-      token:'',
+      token: '',
       dialogFormVisible1: false,
       dialogFormVisible: false,
       dialogFormVisible2: false,
       dialogFormVisible3: false,
       dialogFormVisible4: false,
       dialogFormVisible5: false,
+      dialogVisible3: false,
       goodskuAll: [],
       goodName: [],
-      formLabelWidth: "120px",
-       goodsku: {
-        price:{price:'',},
-        goodspu:{brand:'',}
+      formLabelWidth: '120px',
+      goodsku: {
+        price: { price: '' },
+        goodspu: { brand: '' }
       },
-      goodspus:[],
-      colors:[],
-      sorts:[],
-      unitss:[],
-      
+      goodspus: [],
+      colors: [],
+      sorts: [],
+      unitss: [],
+
+      // 上传图片属性
+      file: {},
+      goodId: '',
+      goodName1: '',
+      imgUrls: [],
+
       rules: {
-        skuName: [{ required: true, message: "请输入商品名", trigger: "blur" }],
+        skuName: [{ required: true, message: '请输入商品名', trigger: 'blur' }],
         skuDesc: [
-          { required: true, message: "请输入商品描述", trigger: "blur" },
+          { required: true, message: '请输入商品描述', trigger: 'blur' }
         ],
-        ["price.price"]: [
-          { required: true, message: "请输入价格", trigger: "blur" },
+        ['price.price']: [
+          { required: true, message: '请输入价格', trigger: 'blur' }
         ],
-        ["color.colorName"]: [
-          { required: true, message: "请输入颜色", trigger: "blur" },
+        ['color.colorName']: [
+          { required: true, message: '请输入颜色', trigger: 'blur' }
         ],
-        ["sort.sortName"]: [
-          { required: true, validator: "请输入所属分类", trigger: "blur" },
+        ['sort.sortName']: [
+          { required: true, validator: '请输入所属分类', trigger: 'blur' }
         ],
-        ["units.unitsName"]: [
-          { required: true, message: "请输入单位", trigger: "blur" },
+        ['units.unitsName']: [
+          { required: true, message: '请输入单位', trigger: 'blur' }
         ],
-        ["goodspu.status"]: [
-          { required: true, message: "请输入上架状态", trigger: "blur" },
+        ['goodspu.status']: [
+          { required: true, message: '请输入上架状态', trigger: 'blur' }
         ],
-        ["goodspu.brand"]: [
-          { required: true, message: "请输入品牌商", trigger: "blur" },
-        ],
-      },
+        ['goodspu.brand']: [
+          { required: true, message: '请输入品牌商', trigger: 'blur' }
+        ]
+      }
     };
   },
 
@@ -449,10 +453,10 @@ export default {
       this.dialogFormVisible = true;
       // let token =  sessionStorage.getItem("token",response.data.token);
       this.axios
-        .post("http://localhost:8088/goodsku/insertGood", this.goodsku)
+        .post('http://localhost:8088/goodsku/insertGood', this.goodsku)
         .then((response) => {
           if (response.data.code === 200) {
-            this.$alert("添加成功");
+            this.$alert('添加成功');
             this.dialogFormVisible = false;
             this.list();
           } else {
@@ -463,59 +467,62 @@ export default {
           console.log(error);
         });
     },
-    addcolor(){
-      this.color.token = sessionStorage.getItem("token");
-      this.axios.post("http://localhost:8088/goodsku/insertColor",this.color)
-      .then((response)=>{
-        if(response.data.code === 200){
-            this.$alert("添加成功");
+    addcolor() {
+      this.color.token = sessionStorage.getItem('token');
+      this.axios
+        .post('http://localhost:8088/goodsku/insertColor', this.color)
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.$alert('添加成功');
             this.dialogFormVisible3 = false;
-            this.color={
-              colorNmae:'',
-            },
-            this.list();
-        } else {
+            (this.color = {
+              colorNmae: ''
+            }),
+              this.list();
+          } else {
             this.$message.error(response.data.message);
           }
-      })
+        });
     },
-    addsort(){
-      this.sort.token = sessionStorage.getItem("token");
-      this.axios.post("http://localhost:8088/goodsku/insertSort",this.sort)
-      .then((response)=>{
-        if(response.data.code === 200){
-            this.$alert("添加成功");
+    addsort() {
+      this.sort.token = sessionStorage.getItem('token');
+      this.axios
+        .post('http://localhost:8088/goodsku/insertSort', this.sort)
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.$alert('添加成功');
             this.dialogFormVisible3 = false;
-            this.sort={
-              sortName:'',
-            },
-            this.list();
-        } else {
+            (this.sort = {
+              sortName: ''
+            }),
+              this.list();
+          } else {
             this.$message.error(response.data.message);
           }
-      })
+        });
     },
-    addunits(){
-      this.units.token = sessionStorage.getItem("token");
-      this.axios.post("http://localhost:8088/goodsku/insertUnits",this.units)
-      .then((response)=>{
-        if(response.data.code === 200){
-            this.$alert("添加成功");
+    addunits() {
+      this.units.token = sessionStorage.getItem('token');
+      this.axios
+        .post('http://localhost:8088/goodsku/insertUnits', this.units)
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.$alert('添加成功');
             this.dialogFormVisible4 = false;
-            this.units={
-              unitsName:'',
-            },
-            this.list();
-        } else {
+            (this.units = {
+              unitsName: ''
+            }),
+              this.list();
+          } else {
             this.$message.error(response.data.message);
           }
-      })
+        });
     },
     // 查询商品信息
     // 查询商品信息
     list() {
       this.axios
-        .get("http://localhost:8088/goodsku/listGoodsku")
+        .get('http://localhost:8088/goodsku/listGoodsku')
         .then((response) => {
           if (response.status === 200) {
             // console.log(response.data)
@@ -524,54 +531,63 @@ export default {
           }
         });
     },
-    listColor(){
-      this.axios.get("http://localhost:8088/goodsku/listColor").then((response)=>{
-        let data = response.data;
-        if(response.status === 200){
-          this.colors = data;
-        }
-      })
+    listColor() {
+      this.axios
+        .get('http://localhost:8088/goodsku/listColor')
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200) {
+            this.colors = data;
+          }
+        });
     },
-   listSort(){
-      this.axios.get("http://localhost:8088/goodsku/listSort").then((response)=>{
-        let data = response.data;
-        if(response.status === 200){
-           this.sorts = data;
-        }
-      })
+    listSort() {
+      this.axios
+        .get('http://localhost:8088/goodsku/listSort')
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200) {
+            this.sorts = data;
+          }
+        });
     },
-    listGoodSpus(){
-      this.axios.get("http://localhost:8088/goodsku/listGoodSpus").then((response)=>{
-        let data = response.data;
-        if(response.status === 200){
-          this.goodspus = data; 
-        }
-      })
+    listGoodSpus() {
+      this.axios
+        .get('http://localhost:8088/goodsku/listGoodSpus')
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200) {
+            this.goodspus = data;
+          }
+        });
     },
-    
-   listUnits(){
-      this.axios.get("http://localhost:8088/goodsku/listUnits").then((response)=>{
-        let data = response.data;
-        if(response.status === 200){
-          this.unitss = data;
-        }
-      })
+
+    listUnits() {
+      this.axios
+        .get('http://localhost:8088/goodsku/listUnits')
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200) {
+            this.unitss = data;
+          }
+        });
     },
     //修改
     edit(row) {
       this.dialogFormVisible2 = true;
-      this.goodsku = row
-      this.axios.post("http://localhost:8088/goodsku/listByid",this.goodsku)
-      .then((response)=>{
-        if(response.status === 200){
-          console.log(response.data)
-          this.goodsku = response.data;
-          this.goodsku.price = response.data.price;
-          console.log(response.data)
-          this.goodsku.goodspu = response.data.goodspu;
-          console.log(222)
-        }
-      })
+      this.goodsku = row;
+      this.axios
+        .post('http://localhost:8088/goodsku/listByid', this.goodsku)
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response.data);
+            this.goodsku = response.data;
+            this.goodsku.price = response.data.price;
+            console.log(response.data);
+            this.goodsku.goodspu = response.data.goodspu;
+            console.log(222);
+          }
+        });
     },
     // 查询商品详细信息
     serachForAll(row) {
@@ -602,10 +618,10 @@ export default {
     // 修改商品信息
     update() {
       this.axios
-        .post("http://localhost:8088/goodsku/updateGood", this.goodsku)
+        .post('http://localhost:8088/goodsku/updateGood', this.goodsku)
         .then((response) => {
           if (response.status === 200) {
-            this.$alert("修改成功");
+            this.$alert('修改成功');
             this.dialogFormVisible2 = false;
             this.list();
             this.goodsku = {
@@ -664,7 +680,7 @@ export default {
       this.dialogVisible3 = true;
       console.log(row);
       this.goodId = row.id;
-      this.goodName = row.skuName;
+      this.goodName1 = row.skuName;
     },
     // 监听所有文件，获取上传文件
     getFile(event) {
@@ -676,7 +692,7 @@ export default {
       var formData = new FormData();
       formData.append('file', this.file);
       formData.append('skuId', this.goodId);
-      formData.append('name', this.goodName);
+      formData.append('name', this.goodName1);
       this.axios({
         url: 'http://localhost:8088/uploadImg/add',
         method: 'post',
@@ -703,10 +719,10 @@ export default {
   created() {
     this.list();
     this.listGoodSpus();
-    this.listColor()
-    this.listSort()
-    this.listUnits()
-  },
+    this.listColor();
+    this.listSort();
+    this.listUnits();
+  }
 };
 </script>
 <style>
