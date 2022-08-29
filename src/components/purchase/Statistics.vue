@@ -184,7 +184,7 @@ export default {
         .then((res) => {
           if (res.status === 200) {
             this.$message.success(res.data.message);
-            this.tableData = {};
+            location.reload();
           }
         });
       this.dialogTableVisible1 = false;
