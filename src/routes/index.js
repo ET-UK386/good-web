@@ -42,12 +42,12 @@ export default new Router({
         {
           path: '/Purchase/Detail',
           component: () => import('@/components/purchase/Detail'),
-          name: '订单明细'
+          name: '审核列表'
         },
         {
           path: '/Purchase/Statistics',
           component: () => import('@/components/purchase/Statistics'),
-          name: '采购统计'
+          name: '流程列表'
         },
         {
           path: '/Purchase/Stock',

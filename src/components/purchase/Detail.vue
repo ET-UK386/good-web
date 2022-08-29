@@ -1,134 +1,150 @@
 <template>
-  <div style="height: 100%">
-    <el-table :data="tableData" height="100%" border style="width: 100%">
-      <el-table-column prop="id" label="id" width="80px"> </el-table-column>
-      <el-table-column prop="purchaseDesc" label="描述" width="100px">
+  <div>
+    <el-table :data="tableData" border style="width: 100%">
+      <el-table-column fixed prop="createTime" label="日期"> </el-table-column>
+      <el-table-column prop="purchaseNumber" label="订单商品条数">
       </el-table-column>
-      <el-table-column prop="purchaseNumber" label="购买数量" width="100px">
-      </el-table-column>
-      <el-table-column prop="examineUser.username" label="审核人" width="100px">
-      </el-table-column>
-      <el-table-column prop="examineTime" label="审核时间" width="100px">
-      </el-table-column>
-      <el-table-column prop="examineOpinion" label="审核人意见" width="100px">
-      </el-table-column>
-      <el-table-column prop="status" label="审核状态" width="100px">
-      </el-table-column>
-      <el-table-column prop="createUser.username" label="创建人" width="100px">
-      </el-table-column>
-      <el-table-column prop="createTime" label="创建时间"> </el-table-column>
-      <el-table-column prop="userRenew.username" label="更新人">
-      </el-table-column>
-      <el-table-column prop="renewTime" label="更新时间"> </el-table-column>
-
-      <el-table-column label="操作">
+      <el-table-column prop="sumPrice" label="进货总价格"></el-table-column>
+      <el-table-column label="审核状态">
         <template slot-scope="scope">
-          <el-button
-            icon="el-icon-search"
-            circle
-            @click="show(scope.row)"
-          ></el-button>
-          <el-button type="primary" icon="el-icon-edit" circle></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle></el-button>
+          <el-tag size="medium">{{ scope.row.examineStatusStr }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="examineUser.username" label="审核人">
+      </el-table-column>
+      <el-table-column prop="examineTime" label="审核时间"> </el-table-column>
+      <el-table-column prop="examineOpinion" label="审核意见">
+      </el-table-column>
+      <el-table-column fixed="right" label="操作">
+        <template slot-scope="scope">
+          <el-button @click="handleClick(scope.row)" type="text"
+            >查看</el-button
+          >
+          <el-button type="text" @click="audit(scope.row)">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <!-- dialog -->
-    <el-dialog title="查看" width="80%" :visible.sync="dialogTableVisible">
-      <el-table :data="gridData">
-        <el-table-column prop="id" label="id" width="80px"/>
-        <el-table-column prop="purchase.id" label="进货单号" width="100px"/>
-        <el-table-column prop="vendor.id" label="经销商编号" width="100px"/>
-        <el-table-column prop="goodsku.id" label="商品sku号" width="100px"/>
-        <el-table-column prop="batch" label="批次" width="100px"/>
-        <el-table-column prop="purchasePrice" label="单价" width="100px"/>
-        <el-table-column prop="status" label="审核状态" width="100px"/>
-        <el-table-column prop="createUser.username" label="创建人" width="100px"/>
-        <el-table-column prop="createTime" label="创建时间"/>
-        <el-table-column prop="renewUser.username" label="更新人"/>
-        <el-table-column prop="renewTime" label="更新时间"/>
+
+    <el-dialog title="详细订单" :visible.sync="dialogTableVisible">
+      <el-table :data="gridData" border style="width: 100%">
+        <el-table-column fixed prop="goodsku.skuNameStr" label="商品名称">
+        </el-table-column>
+        <el-table-column prop="vendor.vendorName" label="供应商">
+        </el-table-column>
+        <el-table-column prop="number" label="进货数量"> </el-table-column>
+        <el-table-column prop="purchasePrice" label="进货单价">
+        </el-table-column>
       </el-table>
+    </el-dialog>
+
+    <el-dialog title="流程审核" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="审核状态" :label-width="formLabelWidth">
+          <el-select v-model="form.examineStatus" placeholder="请选择审核状态">
+            <el-option label="通过" value="1"></el-option>
+            <el-option label="不通过" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="意见"
+          :label-width="formLabelWidth"
+          v-if="form.examineStatus == 2"
+        >
+          <el-input v-model="form.examineOpinion" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submit">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
+
 <script>
-import axios from "axios";
 export default {
+  methods: {
+    handleClick(row) {
+      this.dialogTableVisible = true;
+      let purchaseId = row.id;
+      this.axios
+        .get(
+          'http://localhost:8088/purchase/getDetailedPurchaseByPurchaseId/' +
+            purchaseId
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            this.gridData = res.data.data;
+          }
+        })
+        .catch(() => {
+          this.$message.danger('网络正忙');
+        });
+    },
+    audit(row) {
+      this.dialogFormVisible = true;
+      this.form.id = row.id;
+    },
+    submit() {
+      this.form.token = sessionStorage.getItem('token');
+      console.log(this.form);
+      this.axios
+        .put('http://localhost:8088/purchase/purchaseAudit', this.form)
+        .then((res) => {
+          if (res.status === 200) {
+            if (res.data.code === 200) {
+              this.$message.success('审核成功');
+              this.dialogFormVisible = false;
+              let purchase = res.data.data;
+              // 创建入库订单
+              this.axios
+                .post(
+                  'http://localhost:8088/warehousing/createWarehousing',
+                  purchase
+                )
+                .then((res) => {
+                  if (res.status === 200) {
+                    this.$message.success('入库流程订单创建成功');
+                  }
+                });
+              this.bindList();
+            } else if (res.data.code === 404) {
+              this.$message.success('审核成功');
+              this.dialogFormVisible = false;
+              this.bindList();
+            }
+          } else {
+            this.$message.success(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    bindList() {
+      this.axios
+        .get('http://localhost:8088/purchase/getPurchaseNotReviewed')
+        .then((res) => {
+          let data = res.data;
+          if (res.status == 200) {
+            this.tableData = data.data;
+          }
+        });
+    }
+  },
+
   data() {
     return {
-      dialogTableVisible: false,
-      dialogFormVisible: false,
       tableData: [],
       gridData: [],
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {},
+      formLabelWidth: '120px'
     };
   },
-  methods: {
-    show(row) {
-      let id = row.id;
-      this.dialogTableVisible = true;
-      // 查看详情
-      axios
-        .get("http://localhost:8088/listPurchaseDetailedPurchaseById/" + id)
-        .then((res) => {
-          let data = res.data;
-          console.log(data);
-          if (res.status === 200) {
-            this.gridData = data;
-            this.gridData.forEach((item) => {
-              if (item.status == 0) {
-                item.status = "审核中";
-              } else if (item.status == 1) {
-                item.status = "审核完成";
-              } else if (item.status == 2) {
-                item.status = "审核不通过";
-              } else if (item.status == 3) {
-                item.status = "审核驳回需要修改";
-              } else if (item.status == 4) {
-                item.status = "订单完成";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    //取消添加操作
-    noShow() {
-      this.dialogTableVisible = false;
-    },
-
-    // 绑定数据
-    list() {
-      this.axios
-        .get("http://localhost:8088/showAllStoke")
-        .then((res) => {
-          let data = res.data;
-          if (res.status === 200) {
-            this.tableData = data;
-            this.tableData.forEach((item) => {
-              if (item.status == 0) {
-                item.status = "审核中";
-              } else if (item.status == 1) {
-                item.status = "审核完成";
-              } else if (item.status == 2) {
-                item.status = "审核不通过";
-              } else if (item.status == 3) {
-                item.status = "审核驳回需要修改";
-              } else if (item.status == 4) {
-                item.status = "订单完成";
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-  },
   created() {
-    this.list();
-  },
+    this.bindList();
+  }
 };
 </script>

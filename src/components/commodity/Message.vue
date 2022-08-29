@@ -31,6 +31,7 @@
       <el-table-column prop="goodspu.brand" label="品牌商" width="80">
       </el-table-column>
       <el-table-column prop="sort.sortName" label="所属分类" width="95">
+
       </el-table-column>
       <el-table-column prop="color.colorName" label="颜色" width="80">
       </el-table-column>
@@ -44,7 +45,7 @@
       </el-table-column>
       <el-table-column prop="renewTime" label="修改时间" width="100">
       </el-table-column>
-      <el-table-column label="操作" width="180">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             icon="el-icon-search"
@@ -61,6 +62,12 @@
             type="danger"
             icon="el-icon-delete"
             @click="del(scope.row)"
+            circle
+          ></el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-picture"
+            @click="upload(scope.row)"
             circle
           ></el-button>
         </template>
@@ -364,6 +371,18 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <!-- 上传图片标签-->
+    <el-dialog :title="goodName" :visible.sync="dialogVisible3" width="30%">
+      <div>
+        <span class="add">上传图片</span>
+        <input type="file" @change="getFile($event)" />
+      </div>
+      <div>
+        <input type="hidden" :value="goodId" />
+      </div>
+      <button @click="uploadImg">上传</button>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -567,11 +586,11 @@ export default {
     //根据商品名或分类名查询
     search() {
       this.axios
-        .get("http://localhost:8088/goodsku/fingByskuNameorSortName", {
+        .get('http://localhost:8088/goodsku/fingByskuNameorSortName', {
           params: {
             skuName: this.skuName,
-            sortName: this.sortName,
-          },
+            sortName: this.sortName
+          }
         })
         .then((response) => {
           if (response.status === 200) {
@@ -589,6 +608,24 @@ export default {
             this.$alert("修改成功");
             this.dialogFormVisible2 = false;
             this.list();
+            this.goodsku = {
+              id: '',
+              skuName: '',
+              skuDesc: '',
+              price: { price: '' },
+              color: { colorName: '' },
+              goodspu: {
+                id: '',
+                brand: '',
+                status: '',
+                sort: { sortName: '' }
+              },
+              units: { unitsName: '' },
+              warehouse: { stockNumber: '' },
+              salesVolume: '',
+              manufacturer: '',
+              vendor: { vendorName: '', tel: '' }
+            };
           } else {
             this.$message.error(response.data.message);
           }
@@ -599,22 +636,22 @@ export default {
     },
     // 逻辑删除商品
     del(row) {
-      this.$confirm("此操作将永久删除" + row.skuName + ", 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('此操作将永久删除' + row.skuName + ', 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(() => {
         this.axios
-          .get("http://localhost:8088/goodsku/del", {
+          .get('http://localhost:8088/goodsku/del', {
             params: {
-              id: row.id,
-            },
+              id: row.id
+            }
           })
           .then((response) => {
             if (response.status === 200) {
               this.$message({
-                type: "success",
-                message: "删除成功!",
+                type: 'success',
+                message: '删除成功!'
               });
               this.currentPage = 1;
               this.list();
@@ -622,6 +659,46 @@ export default {
           });
       });
     },
+    // 上传图片方法
+    upload(row) {
+      this.dialogVisible3 = true;
+      console.log(row);
+      this.goodId = row.id;
+      this.goodName = row.skuName;
+    },
+    // 监听所有文件，获取上传文件
+    getFile(event) {
+      console.log(event.target.files[0]);
+      this.file = event.target.files[0];
+    },
+    // 图片上传表单提交事件
+    uploadImg() {
+      var formData = new FormData();
+      formData.append('file', this.file);
+      formData.append('skuId', this.goodId);
+      formData.append('name', this.goodName);
+      this.axios({
+        url: 'http://localhost:8088/uploadImg/add',
+        method: 'post',
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then((res) => {
+          let data = res.data;
+          if (data.code === 200) {
+            this.$message.success('上传成功');
+            this.dialogVisible3 = false;
+          } else {
+            this.$message.error('上传失败');
+          }
+        })
+        .error((err) => {
+          this.$message.error('网络正忙');
+          console.log(err);
+        });
+    }
   },
   created() {
     this.list();
