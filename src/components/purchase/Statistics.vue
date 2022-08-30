@@ -20,7 +20,7 @@
           <el-button @click="handleClick(scope.row)" type="text"
             >查看</el-button
           >
-          <el-button type="text" @click="audit(scope.row)">审核</el-button>
+          <!-- <el-button type="text" @click="audit(scope.row)">审核</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -47,7 +47,7 @@ export default {
       let purchaseId = row.id;
       this.axios
         .get(
-          'http://localhost:8088/purchase/getDetailedPurchaseByPurchaseId/' +
+          "http://localhost:8088/purchase/getDetailedPurchaseByPurchaseId/" +
             purchaseId
         )
         .then((res) => {
@@ -56,7 +56,7 @@ export default {
           }
         })
         .catch(() => {
-          this.$message.danger('网络正忙');
+          this.$message.danger("网络正忙");
         });
     },
     audit(row) {
@@ -65,14 +65,14 @@ export default {
     },
     bindList() {
       this.axios
-        .get('http://localhost:8088/purchase/getPurchase')
+        .get("http://localhost:8088/purchase/getAllPurchase")
         .then((res) => {
           let data = res.data;
           if (res.status == 200) {
             this.tableData = data.data;
           }
         });
-    }
+    },
   },
 
   data() {
@@ -81,11 +81,11 @@ export default {
       gridData: [],
       dialogTableVisible: false,
       dialogFormVisible: false,
-      form: {}
+      form: {},
     };
   },
   created() {
     this.bindList();
-  }
+  },
 };
 </script>
