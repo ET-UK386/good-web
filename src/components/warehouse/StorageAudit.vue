@@ -117,6 +117,8 @@ export default {
       this.warehousing.detailedWarehousingList = this.gridData;
       this.warehousing.token = sessionStorage.getItem('token');
 
+      console.log(this.warehousing);
+
       this.axios
         .put(
           'http://localhost:8088/warehousing/inventoryAudit',

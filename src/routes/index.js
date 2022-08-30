@@ -135,6 +135,18 @@ export default new Router({
     {
       path: '/home',
       component: () => import('@/components/Home'),
+      name: '上架管理',
+      children: [
+        {
+          path: '/goodrise',
+          component: () => import('@/components/goodrise/Goodrise'),
+          name: '商品上架'
+        }
+      ]
+    },
+    {
+      path: '/home',
+      component: () => import('@/components/Home'),
       name: '员工管理',
       children: [
         {

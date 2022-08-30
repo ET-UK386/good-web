@@ -24,51 +24,21 @@
 
     <!-- 商品信息展示 -->
     <el-table :data="goodskus" stripe style="width: 100%">
-      <el-table-column prop="skuName" label="商品名" width="120   ">
+      <el-table-column prop="skuName" label="商品名"> </el-table-column>
+      <el-table-column prop="skuDesc" label="商品描述"> </el-table-column>
+
+      <el-table-column prop="stockNumber" label="商品库存数量">
       </el-table-column>
-      <el-table-column prop="skuDesc" label="商品描述" width="95">
-      </el-table-column>
-      <el-table-column prop="goodspu.brand" label="品牌商" width="80">
-      </el-table-column>
-      <el-table-column prop="sort.sortName" label="所属分类" width="95">
-      </el-table-column>
-      <el-table-column prop="color.colorName" label="颜色" width="80">
-      </el-table-column>
-      <el-table-column prop="price.price" label="价格" width="80">
-      </el-table-column>
-      <el-table-column prop="user.username" label="创建人" width="80">
-      </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="100">
-      </el-table-column>
-      <el-table-column prop="user.userRenewName" label="修改人" width="95">
-      </el-table-column>
-      <el-table-column prop="renewTime" label="修改时间" width="100">
-      </el-table-column>
+      <el-table-column prop="price" label="售价"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button
-            icon="el-icon-search"
-            circle
-            @click="serachForAll(scope.row)"
-          ></el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-edit"
-            circle
-            @click="edit(scope.row)"
-          ></el-button>
-          <el-button
-            type="danger"
-            icon="el-icon-delete"
-            @click="del(scope.row)"
-            circle
-          ></el-button>
-          <el-button
+          <el-button type="primary" @click="add(scope.row)">上架</el-button>
+          <!-- <el-button
             type="primary"
             icon="el-icon-picture"
             @click="upload(scope.row)"
             circle
-          ></el-button>
+          ></el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -140,105 +110,11 @@
     </el-dialog>
     <!-- 新增 -->
     <el-dialog title="新增商品" :visible.sync="dialogFormVisible">
-      <el-form :model="goodsku">
-        <el-form-item hidden label="id" :label-width="formLabelWidth">
-          <el-input v-model="goodsku.id" readonly="readonly" autocomplete="off">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="商品名" :label-width="formLabelWidth">
-          <el-select v-model="goodsku.spuId" placeholder="请选择商品">
-            <el-option
-              v-for="item in goodspus"
-              :key="item.id"
-              :label="item.goodName"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="商品名"
-          :label-width="formLabelWidth"
-          prop="skuName"
-        >
-          <el-input v-model="goodsku.skuName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item
-          label="商品描述"
-          :label-width="formLabelWidth"
-          prop="skuDesc"
-        >
-          <el-input v-model="goodsku.skuDesc" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item
-          label="价格"
-          :label-width="formLabelWidth"
-          prop="price.price"
-        >
-          <el-input v-model="goodsku.price.price" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item
-          label="颜色"
-          :label-width="formLabelWidth"
-          prop="colorName"
-        >
-          <el-select v-model="goodsku.colorId" placeholder="请选择颜色">
-            <el-option
-              v-for="item in colors"
-              :key="item.id"
-              :label="item.colorName"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-          <el-button plain @click="dialogFormVisible3 = true"
-            >其它颜色</el-button
-          >
-        </el-form-item>
-        <el-form-item
-          label="所属分类"
-          :label-width="formLabelWidth"
-          prop="sort.sortName"
-        >
-          <el-select v-model="goodsku.sortId" placeholder="请选择分类">
-            <el-option
-              v-for="item in sorts"
-              :key="item.id"
-              :label="item.sortName"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-          <el-button plain @click="dialogFormVisible4 = true"
-            >其它分类</el-button
-          >
-        </el-form-item>
-        <el-form-item
-          label="单位"
-          :label-width="formLabelWidth"
-          prop="units.unitsName"
-        >
-          <el-select v-model="goodsku.companyId" placeholder="请选择单位">
-            <el-option
-              v-for="item in unitss"
-              :key="item.id"
-              :label="item.unitsName"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-          <el-button plain @click="dialogFormVisible5 = true"
-            >其它单位</el-button
-          >
-        </el-form-item>
-
-        <el-form-item
-          label="生产商"
-          :label-width="formLabelWidth"
-          prop="goodspu.brand"
-        >
-          <el-input v-model="goodspu.brand" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
+      <el-input v-model="pricestr" autocomplete="off"> </el-input>
+      <el-input v-model="risenum" autocomplete="off"> </el-input>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add">确 定</el-button>
+        <el-button type="primary" @click="add1">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 修改 -->
@@ -375,7 +251,7 @@
     <!-- 上传图片标签-->
     <el-dialog :title="goodName1" :visible.sync="dialogVisible3" width="30%">
       <div>
-        <span class="add">上传图片</span>
+        <span class="add1">上传图片</span>
         <input type="file" @change="getFile($event)" />
       </div>
       <div>
@@ -423,6 +299,10 @@ export default {
       goodName1: '',
       imgUrls: [],
 
+      pricestr: '',
+      risenum: '',
+      skuId: '',
+
       rules: {
         skuName: [{ required: true, message: '请输入商品名', trigger: 'blur' }],
         skuDesc: [
@@ -452,11 +332,23 @@ export default {
 
   methods: {
     //添加
-    add() {
+    add(row) {
+      console.log(row);
+      this.skuId = row.skuId;
+
+      this.dialogFormVisible = true;
+      // let token =  sessionStorage.getItem("token",response.data.token);
+    },
+    //添加
+    add1() {
       this.dialogFormVisible = true;
       // let token =  sessionStorage.getItem("token",response.data.token);
       this.axios
-        .post('http://localhost:8088/goodsku/insertGood', this.goodsku)
+        .post('http://localhost:8088/gwc/insertGood', {
+          skuId: this.skuId,
+          price: this.pricestr,
+          stockNumber: this.risenum
+        })
         .then((response) => {
           if (response.data.code === 200) {
             this.$alert('添加成功');
@@ -524,15 +416,13 @@ export default {
     // 查询商品信息
     // 查询商品信息
     list() {
-      this.axios
-        .get('http://localhost:8088/goodsku/listGoodsku')
-        .then((response) => {
-          if (response.status === 200) {
-            // console.log(response.data)
-            // console.log(response.data[3]);
-            this.goodskus = response.data;
-          }
-        });
+      this.axios.get('http://localhost:8088/gwc/findAll').then((response) => {
+        if (response.status === 200) {
+          // console.log(response.data)
+          // console.log(response.data[3]);
+          this.goodskus = response.data.data;
+        }
+      });
     },
     listColor() {
       this.axios
