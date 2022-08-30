@@ -95,6 +95,11 @@ export default new Router({
           path: '/Commodity/Message',
           component: () => import('@/components/commodity/Message'),
           name: '商品信息'
+        },
+        {
+          path: '/Commodity/goodspu',
+          component: () => import('@/components/commodity/goodspu'),
+          name: '商品spu信息'
         }
       ]
     },
@@ -124,6 +129,18 @@ export default new Router({
           path: '/Supplier/Message',
           component: () => import('@/components/supplier/Message'),
           name: '供应商信息'
+        }
+      ]
+    },
+    {
+      path: '/home',
+      component: () => import('@/components/Home'),
+      name: '上架管理',
+      children: [
+        {
+          path: '/goodrise/Goodrise',
+          component: () => import('@/components/goodrise/Goodrise'),
+          name: '商品上架'
         }
       ]
     },

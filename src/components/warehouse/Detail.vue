@@ -1,36 +1,19 @@
 <template>
   <div>
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="createTime" label="入库审核时间" width="180">
-      </el-table-column>
-      <el-table-column
-        prop="detailedPurchase.batch"
-        label="订单编号"
-        width="180"
-      >
-      </el-table-column>
-      <el-table-column prop="goodsku.skuName" label="入库商品名称" width="180">
+      <el-table-column prop="createTime" label="入库审核时间">
       </el-table-column>
 
-      <el-table-column label="状态" width="180">
+      <el-table-column label="状态">
         <template slot-scope="scope">
           <el-tag size="medium">{{ scope.row.statusStr }}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column prop="warehousingNumber" label="数量" width="180">
+      <el-table-column prop="warehousingNumber" label="数量"> </el-table-column>
+      <el-table-column prop="examineUser.username" label="签收审核人">
       </el-table-column>
-      <el-table-column
-        prop="examineUser.username"
-        label="签收审核人"
-        width="180"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="warehousingUser.username"
-        label="入库审核人"
-        width="180"
-      >
+      <el-table-column prop="warehousingUser.username" label="入库审核人">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -39,87 +22,15 @@
       </el-table-column>
     </el-table>
     <el-dialog title="仓库记录" :visible.sync="dialogTableVisible">
-      <table id="table" cellspacing="0">
-        <tr>
-          <td class="right">入库批号</td>
-          <td>
-            <input
-              readonly
-              type="text"
-              :value="gridData.detailedPurchase.batch"
-            />
-          </td>
-          <td class="right">入库单</td>
-          <td colspan="3">
-            <input readonly type="text" :value="gridData.id" />
-          </td>
-        </tr>
-        <tr>
-          <td class="right">审核人</td>
-          <td>
-            <input
-              readonly
-              type="text"
-              :value="
-                gridData.examineUser == null
-                  ? ''
-                  : gridData.examineUser.username
-              "
-            />
-          </td>
-          <td class="right">审核时间</td>
-          <td colspan="3">
-            <input
-              readonly
-              type="text"
-              :value="gridData.examineTime == null ? '' : gridData.examineTime"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td class="right">入库人</td>
-          <td>
-            <input
-              readonly
-              type="text"
-              :value="
-                gridData.warehousingUser == null
-                  ? ''
-                  : gridData.warehousingUser.username
-              "
-            />
-          </td>
-          <td class="right">入库时间</td>
-          <td colspan="3">
-            <input
-              readonly
-              type="text"
-              :value="
-                gridData.warehousingTime == null ? '' : gridData.warehousingTime
-              "
-            />
-          </td>
-        </tr>
-        <tr>
-          <td class="right">商品名称</td>
-          <td>
-            <input readonly type="text" :value="gridData.goodsku.skuName" />
-          </td>
-          <td class="right">数量</td>
-          <td>
-            <input readonly type="text" :value="gridData.warehousingNumber" />
-          </td>
-          <td class="right">价格</td>
-          <td>
-            <input
-              readonly
-              type="text"
-              :value="gridData.detailedPurchase.purchasePrice"
-            />
-          </td>
-        </tr>
-      </table>
-    </el-dialog>
+      <el-table :data="gridData" border style="width: 100%">
+        <el-table-column fixed prop="goodsku.skuName" label="商品名称">
+        </el-table-column>
+        <el-table-column prop="vendor.vendorName" label="供应商">
+        </el-table-column>
+        <el-table-column prop="number" label="进货数量"> </el-table-column>
+        <el-table-column prop="purchasePrice" label="进货单价">
+        </el-table-column> </el-table
+    ></el-dialog>
   </div>
 </template>
 
@@ -131,45 +42,28 @@ export default {
     return {
       tableData: [],
       dialogTableVisible: false,
-      gridData: {
-        id: 1,
-        examineTime: '',
-        warehousingTime: '',
-        status: 0,
-        statusStr: 0,
-        detailedPurchase: {
-          batch: '',
-          purchasePrice: 0,
-          number: 0
-        },
-        examineUser: {
-          username: ''
-        },
-        warehousingUser: {
-          username: ''
-        },
-        goodsku: {
-          skuName: '',
-          skuDesc: ''
-        }
-      }
+      /** 详细订单数据*/
+      gridData: []
     };
   },
   methods: {
     show(row) {
       let wid = row.id;
+      console.log(wid);
       this.dialogTableVisible = true;
       // 查看详情
-      axios
-        .get('http://localhost:8088/warehousing/find/' + wid)
+      this.axios
+        .get(
+          'http://localhost:8088/warehousing/getDetailedWarehousingByWarehousingId/' +
+            wid
+        )
         .then((res) => {
-          let data = res.data;
-          if (data.code) {
-            this.gridData = data.data;
+          console.log(res);
+          if (res.status === 200) {
+            this.gridData = res.data.data;
+          } else {
+            this.$message.error('网络正忙');
           }
-        })
-        .catch((error) => {
-          console.log(error);
         });
     }
   },

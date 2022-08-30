@@ -3,9 +3,9 @@
     <el-button @click="dialogFormVisible = true" type="primary"
       >添加商品</el-button
     >
-    <el-button @click="submit" type="success">提 交</el-button>
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column fixed prop="skuName" label="商品名称"> </el-table-column>
+      <el-table-column fixed prop="skuNameStr" label="商品名称">
+      </el-table-column>
       <el-table-column prop="vendorName" label="供应商"> </el-table-column>
       <el-table-column prop="number" label="进货数量"> </el-table-column>
       <el-table-column prop="purchasePrice" label="进货单价"> </el-table-column>
@@ -21,7 +21,9 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+    <el-button @click="submit" type="success">提 交</el-button>
+
+    <el-dialog title="具体商品" :visible.sync="dialogFormVisible">
       <el-form
         :model="form"
         :rules="rules"
@@ -37,7 +39,7 @@
             <el-option
               v-for="item in goodskus"
               :key="item.value"
-              :label="item.skuName"
+              :label="item.skuNameStr"
               :value="item.id"
             >
             </el-option>
@@ -93,6 +95,7 @@ export default {
           for (let i = 0; i < this.goodskus.length; i++) {
             if (this.goodskus[i].id == this.form.skuId) {
               this.form.skuName = this.goodskus[i].skuName;
+              this.form.skuNameStr = this.goodskus[i].skuNameStr;
             }
           }
           for (let i = 0; i < this.venders.length; i++) {
@@ -121,6 +124,7 @@ export default {
         .then((res) => {
           if (res.status === 200) {
             this.$message.success(res.data.message);
+            location.reload();
           }
         });
     },
