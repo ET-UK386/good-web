@@ -37,6 +37,7 @@
           <el-button @click="handleClick(scope.row)" type="text"
             >查看</el-button
           >
+
           <el-button type="text" @click="audit(scope.row)">修改</el-button>
         </template>
       </el-table-column>
@@ -230,6 +231,7 @@ export default {
       this.purchaseId = row.id;
       this.axios
         .get(
+
           'http://localhost:8088/purchase/getDetailedPurchaseByPurchaseId/' +
             this.purchaseId
         )
@@ -245,7 +247,7 @@ export default {
           }
         })
         .catch(() => {
-          this.$message.danger('网络正忙');
+          this.$message.danger("网络正忙");
         });
     },
     // 页面加载时绑定数据
@@ -275,7 +277,7 @@ export default {
           this.$message.info('网络正忙');
           console.log(error);
         });
-    }
+    },
   },
 
   data() {

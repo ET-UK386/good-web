@@ -31,6 +31,11 @@ export default new Router({
           path: '/Retail/Returns',
           component: () => import('@/components/retail/Returns'),
           name: '零售退货'
+        },
+        {
+          path: '/retail/LineItem',
+          component: () => import('@/components/retail/LineItem'),
+          name: '订单详情'
         }
       ]
     },
@@ -138,7 +143,7 @@ export default new Router({
       name: '上架管理',
       children: [
         {
-          path: '/goodrise',
+          path: '/goodrise/Goodrise',
           component: () => import('@/components/goodrise/Goodrise'),
           name: '商品上架'
         },
