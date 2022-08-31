@@ -38,6 +38,7 @@ export default new Router({
         {
           path: '/Retail/Returns',
           component: () => import('@/components/retail/Returns'),
+
           name: '零售退货',
           meta:{needLogin:true},
         }
@@ -165,8 +166,9 @@ export default new Router({
       meta:{needLogin:true},
       children: [
         {
-          path: '/goodrise',
+          path: '/goodrise/Goodrise',
           component: () => import('@/components/goodrise/Goodrise'),
+
           name: '商品上架',
           meta:{needLogin:true},
         }
