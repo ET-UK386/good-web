@@ -151,6 +151,11 @@ export default new Router({
           path: '/inSellingGoods',
           component: () => import('@/components/goodrise/InSellingGoods'),
           name: '在售商品'
+        },
+        {
+          path: '/pay',
+          component: () => import('@/components/goodrise/Pay'),
+          name: '付款'
         }
       ]
     },
