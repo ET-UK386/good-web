@@ -25,14 +25,14 @@ export default {
     return {
       user: {
        username:"张三",
-       password:"123"
+       password:"123",
       },
       rules: {
         username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
     };
-  },
+  },  
 
   methods: {
     onSubmit() {
@@ -46,8 +46,6 @@ export default {
               console.log(response)
               sessionStorage.setItem("token",response.data.token);
               sessionStorage.setItem("username",response.data.username);
-            
-             
                 this.$message.success("登录成功");
                 this.$router.push("/HomePage");
            }else{
@@ -55,6 +53,16 @@ export default {
            }  
           }).catch((error)=>{
             console.log(error);
+        //   console.log(response)
+        //   if(response.data.code === 1) {
+        // // 登陆成功之后将后端返回的值保存在浏览器的 Session Storage 中
+        // console.log(response)
+        // sessionStorage.setItem("token", response.data.token);
+        // this.$router.push("/HomePage");
+        // this.$message.success("登陆成功")
+        //   }else {
+        //       this.$message.error(response.data.msg)
+        //   }
           })
         }
       });
