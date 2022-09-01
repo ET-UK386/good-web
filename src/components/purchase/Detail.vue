@@ -69,7 +69,7 @@ export default {
       let purchaseId = row.id;
       this.axios
         .get(
-          'http://localhost:8088/purchase/getDetailedPurchaseByPurchaseId/' +
+          "http://localhost:8088/purchase/getDetailedPurchaseByPurchaseId/" +
             purchaseId
         )
         .then((res) => {
@@ -78,7 +78,7 @@ export default {
           }
         })
         .catch(() => {
-          this.$message.danger('网络正忙');
+          this.$message.danger("网络正忙");
         });
     },
     audit(row) {
@@ -86,30 +86,30 @@ export default {
       this.form.id = row.id;
     },
     submit() {
-      this.form.token = sessionStorage.getItem('token');
+      this.form.token = sessionStorage.getItem("token");
       console.log(this.form);
       this.axios
-        .put('http://localhost:8088/purchase/purchaseAudit', this.form)
+        .put("http://localhost:8088/purchase/purchaseAudit", this.form)
         .then((res) => {
           if (res.status === 200) {
             if (res.data.code === 200) {
-              this.$message.success('审核成功');
+              this.$message.success("审核成功");
               this.dialogFormVisible = false;
               let purchase = res.data.data;
               // 创建入库订单
               this.axios
                 .post(
-                  'http://localhost:8088/warehousing/createWarehousing',
+                  "http://localhost:8088/warehousing/createWarehousing",
                   purchase
                 )
                 .then((res) => {
                   if (res.status === 200) {
-                    this.$message.success('入库流程订单创建成功');
+                    this.$message.success("入库流程订单创建成功");
                   }
                 });
               this.bindList();
             } else if (res.data.code === 404) {
-              this.$message.success('审核成功');
+              this.$message.success("审核成功");
               this.dialogFormVisible = false;
               this.bindList();
             }
@@ -123,14 +123,14 @@ export default {
     },
     bindList() {
       this.axios
-        .get('http://localhost:8088/purchase/getPurchaseNotReviewed')
+        .get("http://localhost:8088/purchase/getPurchaseNotReviewed")
         .then((res) => {
           let data = res.data;
           if (res.status == 200) {
             this.tableData = data.data;
           }
         });
-    }
+    },
   },
 
   data() {
@@ -140,11 +140,11 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {},
-      formLabelWidth: '120px'
+      formLabelWidth: "120px",
     };
   },
   created() {
     this.bindList();
-  }
+  },
 };
 </script>
