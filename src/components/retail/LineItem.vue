@@ -8,6 +8,7 @@
         v-model="SalesDetails"
         style="width: 28%"
         placeholder="请输入标题进行搜索"
+        clearable
       ></el-input
       >&nbsp;<el-button plain @click="SalesDetailsByName">订单搜索</el-button>
       <template>
