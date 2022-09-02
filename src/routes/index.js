@@ -36,7 +36,12 @@ export default new Router({
         {
           path: '/Retail/Returns',
           component: () => import('@/components/retail/Returns'),
-
+          name: '零售退货',
+          meta:{needLogin:true},
+        },
+        {
+          path: '/Retail/LineItem',
+          component: () => import('@/components/retail/LineItem'),
           name: '零售退货',
           meta: { needLogin: true }
         }
