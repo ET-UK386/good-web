@@ -183,17 +183,22 @@ export default {
     },
 
     ConfirmReceipt(row) {
-      this.axios
-        .get("http://localhost:8088/updateSalesDetailsById", {
-          params: {
-            id: row.id,
-          },
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            this.bindData();
-          }
-        });
+      if (row.state === "未支付") {
+        return;
+      } else if (row.state === "未收货") {
+        this.axios
+          .get("http://localhost:8088/updateSalesDetailsById", {
+            params: {
+              id: row.id,
+              status: row.state,
+            },
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              this.bindData();
+            }
+          });
+      }
     },
   },
   created() {
