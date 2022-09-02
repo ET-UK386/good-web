@@ -71,7 +71,7 @@
     <el-dialog
       title="订单详情"
       :visible.sync="dialogVisible"
-      width="50%"
+      width="80%"
       :before-close="handleClose"
     >
       <span slot="footer" class="dialog-footer">
@@ -81,6 +81,9 @@
           <el-table-column fixed prop="number" label="数量" />
           <el-table-column fixed prop="vendor.vendorName" label="商家" />
           <el-table-column fixed prop="state" label="交易状态" />
+          <el-table-column fixed prop="payTime" label="付款时间" />
+          <el-table-column fixed prop="shipmentsTime" label="发货时间" />
+          <el-table-column fixed prop="finishTime" label="成交时间" />
         </el-table>
         <el-button type="primary" @click="dialogVisible = false"
           >确 定</el-button
@@ -172,10 +175,10 @@ export default {
               }
             });
           }
+          this.dialogVisible = true;
         });
     },
     ViewOrder(row) {
-      this.dialogVisible = true;
       this.show(row.id);
     },
     ConfirmReceipt(row) {
