@@ -163,7 +163,7 @@ export default new Router({
       meta: { needLogin: true },
       children: [
         {
-          path: '/goodrise/Goodrise',
+          path: '/goodrise',
           component: () => import('@/components/goodrise/Goodrise'),
           name: '商品上架'
         },
