@@ -183,9 +183,9 @@ export default {
     },
 
     ConfirmReceipt(row) {
-      if (row.state === "未支付") {
-        return;
-      } else if (row.state === "未收货") {
+      // if (row.state === "未支付") {
+      //   return;
+      // } else if (row.state === "未收货") {
         this.axios
           .get("http://localhost:8088/updateSalesDetailsById", {
             params: {
@@ -198,7 +198,7 @@ export default {
               this.bindData();
             }
           });
-      }
+      // }
     },
   },
   created() {
