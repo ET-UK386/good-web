@@ -17,7 +17,34 @@
           <el-table-column prop="price" label="单价" />
           <el-table-column prop="number" label="数量" />
           <el-table-column prop="vendor.vendorName" label="商家" />
-          <el-table-column prop="state" label="交易状态" />
+          <el-table-column
+            prop="state"
+            label="交易状态"
+            :filters="[
+              { text: '未支付', value: '未支付' },
+              { text: '未收货', value: '未收货' },
+              { text: '已收货', value: '已收货' },
+            ]"
+            :filter-method="filterTag"
+            filter-placement="bottom-end"
+          >
+            <template slot-scope="scope">
+              <el-tag
+                :type="
+                  scope.row.state === '未支付'
+                    ? 'warning'
+                    : scope.row.state === '未收货'
+                    ? 'primary'
+                    : scope.row.state === '已收货'
+                    ? 'success'
+                    : 'primary'
+                "
+                disable-transitions
+                >{{ scope.row.state }}</el-tag
+              >
+            </template></el-table-column
+          >
+
           <el-table-column label="交易操作" fixed="right" width="300%">
             <template slot-scope="scope">
               <el-button
@@ -49,11 +76,11 @@
     >
       <span slot="footer" class="dialog-footer">
         <el-table :data="gridData" border style="width: 100%">
-          <el-table-column fixed prop="goodsku.skuName" label="宝贝名称"/>
-          <el-table-column fixed prop="price" label="单价"/>
-          <el-table-column fixed prop="number" label="数量"/>
-          <el-table-column fixed prop="vendor.vendorName" label="商家"/>
-          <el-table-column fixed prop="state" label="交易状态"/>
+          <el-table-column fixed prop="goodsku.skuName" label="宝贝名称" />
+          <el-table-column fixed prop="price" label="单价" />
+          <el-table-column fixed prop="number" label="数量" />
+          <el-table-column fixed prop="vendor.vendorName" label="商家" />
+          <el-table-column fixed prop="state" label="交易状态" />
         </el-table>
         <el-button type="primary" @click="dialogVisible = false"
           >确 定</el-button
@@ -74,6 +101,9 @@ export default {
     };
   },
   methods: {
+    filterTag(value, row) {
+      return row.state === value;
+    },
     //根据名字查询
     SalesDetailsByName() {
       this.axios
