@@ -181,8 +181,19 @@ export default {
     ViewOrder(row) {
       this.show(row.id);
     },
+
     ConfirmReceipt(row) {
-      console.log(row.id);
+      this.axios
+        .get("http://localhost:8088/updateSalesDetailsById", {
+          params: {
+            id: row.id,
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            this.bindData();
+          }
+        });
     },
   },
   created() {
