@@ -229,7 +229,22 @@ export default new Router({
           meta:{needLogin:true},
         }
       ]
-    }
+    },
+    {
+      path: '/home',
+      component: () => import('@/components/Home'),
+      name: '商品详情',
+      meta:{needLogin:true},
+      children: [
+        {
+          path: '/showdetail/ShowDetail',
+          component: ()=>import('@/components/showdetail/ShowDetail'),
+          name: '详情展示',
+          meta:{needLogin:true},
+        }
+      ]
+      
+    },
   ]
   
 });
