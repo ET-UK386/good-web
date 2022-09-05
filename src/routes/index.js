@@ -191,6 +191,18 @@ export default new Router({
           name: '添加验货员'
         }
       ]
-    }
+    },
+    {
+      path: '/home',
+      component: () => import('@/components/Home'),
+      name: '购物车管理',
+      children: [
+        {
+          path: '/Shop/ShopCar',
+          component: () => import('@/components/shop/ShopCar'),
+          name: '购物车列表'
+        }
+      ]
+    },
   ]
 });
