@@ -234,6 +234,24 @@ export default new Router({
           meta: { needLogin: true }
         }
       ]
-    }
+    },
+    {
+      path: '/home',
+      component: () => import('@/components/Home'),
+      name: '购物车管理',
+      children: [
+        {
+          path: '/Shop/ShopCar',
+          component: () => import('@/components/shop/ShopCar'),
+          name: '购物车列表'
+        },
+        {
+          path: '/showdetail/ShowDetail',
+          component: ()=>import('@/components/showdetail/ShowDetail'),
+          name: '详情展示',
+          meta:{needLogin:true},
+        }
+      ]
+    },
   ]
 });
