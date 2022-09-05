@@ -51,6 +51,7 @@
 </template>
 <script>
 export default {
+  meta:{needLogin:true},
   data() {
     return {
       goodspus: [],
