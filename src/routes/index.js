@@ -37,12 +37,12 @@ export default new Router({
           path: '/Retail/Returns',
           component: () => import('@/components/retail/Returns'),
           name: '零售退货',
-          meta:{needLogin:true},
+          meta: { needLogin: true }
         },
         {
           path: '/Retail/LineItem',
           component: () => import('@/components/retail/LineItem'),
-          name: '零售退货',
+          name: '订单详情',
           meta: { needLogin: true }
         }
       ]
@@ -168,17 +168,17 @@ export default new Router({
       meta: { needLogin: true },
       children: [
         {
-          path: '/goodrise',
+          path: '/Goodrise/Goodrise',
           component: () => import('@/components/goodrise/Goodrise'),
           name: '商品上架'
         },
         {
-          path: '/inSellingGoods',
+          path: '/Goodrise/inSellingGoods',
           component: () => import('@/components/goodrise/InSellingGoods'),
           name: '在售商品'
         },
         {
-          path: '/pay',
+          path: '/Goodrise/pay',
           component: () => import('@/components/goodrise/Pay'),
           name: '付款'
         }
@@ -246,12 +246,12 @@ export default new Router({
           name: '购物车列表'
         },
         {
-          path: '/showdetail/ShowDetail',
-          component: ()=>import('@/components/showdetail/ShowDetail'),
+          path: '/ShowDetail/:id',
+          component: () => import('@/components/showdetail/ShowDetail'),
           name: '详情展示',
-          meta:{needLogin:true},
+          meta: { needLogin: true }
         }
       ]
-    },
+    }
   ]
 });

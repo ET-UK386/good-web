@@ -11,7 +11,7 @@
           <el-carousel-item v-for="item in imgs" :key="item">
             <el-image
               style="width: 460px; height: 450px"
-              :src="item.url"
+              :src="item"
               :preview-src-list="srcList"
             >
             </el-image>
@@ -88,43 +88,35 @@ export default {
   data() {
     return {
       imgs: [
-        {
-          url: "https://gd2.alicdn.com/imgextra/i1/3146548014/O1CN01QwFW9M294SpX7XCr9_!!3146548014.jpg",
-        },
-        {
-          url: "https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN01U51BLT294SpkO9tdb_!!3146548014.jpg",
-        },
-        {
-          url: "https://gd2.alicdn.com/imgextra/i2/3146548014/O1CN01F76Q8h294SqKdTypz_!!3146548014.jpg",
-        },
-        {
-          url: "https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN015hTxY0294SqQ5wnbd_!!3146548014.jpg",
-        },
+        'https://gd2.alicdn.com/imgextra/i1/3146548014/O1CN01QwFW9M294SpX7XCr9_!!3146548014.jpg',
+        'https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN01U51BLT294SpkO9tdb_!!3146548014.jpg',
+        'https://gd2.alicdn.com/imgextra/i2/3146548014/O1CN01F76Q8h294SqKdTypz_!!3146548014.jpg',
+        'https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN015hTxY0294SqQ5wnbd_!!3146548014.jpg'
       ],
       srcList: [
-        "https://gd2.alicdn.com/imgextra/i1/3146548014/O1CN01QwFW9M294SpX7XCr9_!!3146548014.jpg",
-        "https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN01U51BLT294SpkO9tdb_!!3146548014.jpg",
-        "https://gd2.alicdn.com/imgextra/i2/3146548014/O1CN01F76Q8h294SqKdTypz_!!3146548014.jpg",
-        "https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN015hTxY0294SqQ5wnbd_!!3146548014.jpg",
+        'https://gd2.alicdn.com/imgextra/i1/3146548014/O1CN01QwFW9M294SpX7XCr9_!!3146548014.jpg',
+        'https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN01U51BLT294SpkO9tdb_!!3146548014.jpg',
+        'https://gd2.alicdn.com/imgextra/i2/3146548014/O1CN01F76Q8h294SqKdTypz_!!3146548014.jpg',
+        'https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN015hTxY0294SqQ5wnbd_!!3146548014.jpg'
       ],
       num: 1,
-      skuTitle:'Turned易冧ounng潮牌链条发泡字母圆领卫衣男早秋美式高街长袖T恤',
-      nowPrice:'498',
-      carNumber:'30'
-
+      skuTitle: 'Turned易冧ounng潮牌链条发泡字母圆领卫衣男早秋美式高街长袖T恤',
+      nowPrice: '498',
+      carNumber: '30',
+      skuId: this.$route.params.skuId
     };
   },
-  
-  created(){
+
+  created() {
     //展示商品信息
-    this.axios.get("'http://localhost:8088/goodsdetail/showdetail'",{'skuid': '15'})
-    .then((res)=>{
-        console.log(res)
-    })
-  }
-  ,
-  methods:{
- 
+    this.axios
+      .get('http://localhost:8088/goodsdetail/showdetail', this.skuId)
+      .then((res) => {
+        console.log(res);
+      });
+  },
+  methods: {
+    handleChange() {}
   }
 };
 </script>

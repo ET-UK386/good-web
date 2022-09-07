@@ -40,6 +40,12 @@ export default {
   methods: {
     show(item) {
       console.log(item);
+      let skuId = item.skuId;
+      console.log(skuId);
+      this.$router.push({
+        path: '/ShowDetail/' + skuId,
+        params: { skuId: skuId }
+      });
     },
     bindData() {
       this.axios
