@@ -20,7 +20,10 @@
       </el-card>
       <!--动态1：购物车商品数量-->
       <el-badge :value="carNumber" class="my-Shopping-Car">
-        <el-button icon="el-icon-shopping-cart-2" type="success"
+        <el-button
+          icon="el-icon-shopping-cart-2"
+          type="success"
+          @click="toShoppingCar"
           >我的购物车</el-button
         >
       </el-badge>
@@ -32,7 +35,7 @@
         </div>
         <div class="info-price">
           <!--动态3：商品原价-->
-          原价：<span style="text-decoration: line-through">￥500</span>
+          原价：<span style="text-decoration: line-through">￥90</span>
           <br />
           <br />
           <!--动态4：商品现价-->
@@ -42,20 +45,16 @@
         </div>
         <!--动态5：规格选择-->
         <div class="goodsku">
-          规格：
-          <el-tag type="warning">s</el-tag>
-          <el-tag type="warning">m</el-tag>
-          <el-tag type="warning">l</el-tag>
-          <el-tag type="warning">xl</el-tag>
-          <el-tag type="warning">xxl</el-tag>
+          规格：<el-button v-for="item in size" :key="item">
+            {{ item }}
+          </el-button>
         </div>
         <!--动态6：颜色选择-->
         <div class="goodcolor">
           颜色：
-          <el-tag type="info">黑色</el-tag>
-          <el-tag type="info">绿色</el-tag>
-          <el-tag type="info">克莱茵兰</el-tag>
-          <el-tag type="info">中国红</el-tag>
+          <el-button v-for="item in color" :key="item" @click="colorChoice(item)">
+            {{ item }}
+          </el-button>
         </div>
         <div class="count">
           数量：
@@ -75,6 +74,7 @@
             style="font-size: 18px"
             icon="el-icon-shopping-cart-2"
             type="success"
+            @click="addToShoppingCar"
             >加入购物车</el-button
           >
         </div>
@@ -87,37 +87,82 @@
 export default {
   data() {
     return {
-      imgs: [
-        'https://gd2.alicdn.com/imgextra/i1/3146548014/O1CN01QwFW9M294SpX7XCr9_!!3146548014.jpg',
-        'https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN01U51BLT294SpkO9tdb_!!3146548014.jpg',
-        'https://gd2.alicdn.com/imgextra/i2/3146548014/O1CN01F76Q8h294SqKdTypz_!!3146548014.jpg',
-        'https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN015hTxY0294SqQ5wnbd_!!3146548014.jpg'
-      ],
-      srcList: [
-        'https://gd2.alicdn.com/imgextra/i1/3146548014/O1CN01QwFW9M294SpX7XCr9_!!3146548014.jpg',
-        'https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN01U51BLT294SpkO9tdb_!!3146548014.jpg',
-        'https://gd2.alicdn.com/imgextra/i2/3146548014/O1CN01F76Q8h294SqKdTypz_!!3146548014.jpg',
-        'https://gd3.alicdn.com/imgextra/i3/3146548014/O1CN015hTxY0294SqQ5wnbd_!!3146548014.jpg'
-      ],
+      imgs: [],
+      srcList: [],
       num: 1,
-      skuTitle: 'Turned易冧ounng潮牌链条发泡字母圆领卫衣男早秋美式高街长袖T恤',
-      nowPrice: '498',
-      carNumber: '30',
-      skuId: this.$route.params.skuId
+      skuTitle: "",
+      nowPrice: "",
+      carNumber: "30",
+      // skuId: this.$route.params.skuId
+      skuid: "18",
+      color: [],
+      size: ["s", "m", "l", "xl", "xxl", "xxxl"],
+      good: {
+        skuid:"",
+        color: "",
+        number: "",
+        price:"",
+      },
     };
   },
 
   created() {
     //展示商品信息
     this.axios
-      .get('http://localhost:8088/goodsdetail/showdetail', this.skuId)
+      .get("http://localhost:8088/goodsdetail/showdetail/" + this.skuid)
       .then((res) => {
-        console.log(res);
+        this.skuTitle = res.data.skuDesc;
+        this.nowPrice = res.data.price.price;
+      });
+    this.axios
+      .get("http://localhost:8088/goodsdetail/showImages/" + this.skuid)
+      .then((res) => {
+        for (var index in res.data) {
+          this.imgs.push(res.data[index].imagesPath.path);
+          this.srcList.push(res.data[index].imagesPath.path);
+        }
+      });
+    this.axios
+      .get("http://localhost:8088/goodsdetail/showColor/" + this.skuid)
+      .then((res) => {
+        for (var index in res.data) {
+          this.color.push(res.data[index].colorName);
+        }
+      });
+    //查询购物车商品数量
+    this.axios
+      .get("http://localhost:8088/goodsdetail/countShoppingCar")
+      .then((res) => {
+        this.carNumber = res.data;
       });
   },
   methods: {
-    handleChange() {}
-  }
+    handleChange() {},
+    //选择颜色
+    colorChoice(item) {
+      this.good.color=item;
+    },
+    //跳转到购物车
+    toShoppingCar() {
+      this.$router.push("/Shop/ShopCar");
+    },
+    //添加购物车
+    addToShoppingCar() {
+      this.good.number=this.num;
+      this.good.price=this.nowPrice;
+      this.good.skuid=this.skuid;
+
+      this.axios
+        .post("http://localhost:8088/goodsdetail/addToShoppingCar",this.good)
+        .then((res) => {
+          if(res.data==1){
+            this.$message("加入购物车成功！");
+          }else{
+            this.$message("加入购物车失败！")
+          }
+        });
+    },
+  },
 };
 </script>
 
